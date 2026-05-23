@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pi-Notes</title>
+
+  <link rel="stylesheet" href="css/master.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <script defer type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">
+      <img width="120px" src="assets/pinelogo.png" alt="Pi-Notes">
+    </div>
+
+    <div class="header-actions">
+      <input type="text" id="searchInput" placeholder="Search notes..." />
+
+      <button id="themeBtn">
+        ☾
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="note-form">
+
+      <input
+        type="text"
+        id="noteTitle"
+        placeholder="Note title..."
+      />
+
+      <textarea
+        id="noteContent"
+        placeholder="Write your thoughts..."
+      ></textarea>
+
+      <div class="form-bottom">
+
+        <select id="noteCategory">
+          <option value="Personal">Personal</option>
+          <option value="Work">Work</option>
+          <option value="Ideas">Ideas</option>
+          <option value="Study">Study</option>
+        </select>
+
+        <button id="addNoteBtn">
+          Add Note
+        </button>
+
+      </div>
+
+    </section>
+
+    <section class="notes-grid" id="notesGrid">
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>
+      © <span id="currentYear"></span> — Pi-Notes
+    </p>
+  </footer>
+
+  <div id="toast"></div>
+
+  <!-- Delete Modal -->
+  <div class="modal-overlay" id="deleteModal">
+
+    <div class="modal">
+
+      <h3>Delete Note</h3>
+
+      <p>
+        Are you sure you want to delete this note?
+      </p>
+
+      <div class="modal-actions">
+
+        <button id="cancelDelete">
+          Cancel
+        </button>
+
+        <button id="confirmDelete">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
+<!-- chef-belly -->
