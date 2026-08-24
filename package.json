@@ -1,0 +1,11 @@
+{
+  "name": "pine-notes",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pi-Notes — dependency-free vanilla JS notes app.",
+  "scripts": {
+    "test": "node --test 'tests/**/*.test.mjs'",
+    "check": "node tests/check-syntax.mjs"
+  }
+}

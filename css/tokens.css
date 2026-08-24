@@ -1,0 +1,63 @@
+:root {
+  /* =========================================================
+     Design System
+     ========================================================= */
+
+  --bg: #0f1110;
+  --surface: #171a18;
+  --surface-2: #1d211f;
+  --surface-3: #242925;
+
+  --text: #f5f7f6;
+  --text-muted: #929a96;
+  --text-subtle: #68716c;
+
+  --primary: #067a57;
+  --primary-hover: #079567;
+  --primary-soft: rgba(6, 122, 87, 0.12);
+
+  --danger: #ff4d4d;
+  --danger-soft: rgba(255, 77, 77, 0.12);
+
+  --warning: #f7c948;
+  --warning-soft: rgba(247, 201, 72, 0.12);
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --overlay: rgba(0, 0, 0, 0.68);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.28);
+
+  --container: 1400px;
+
+  --ease: 0.2s ease;
+  --ease-slow: 0.3s ease;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --focus-ring: var(--primary);
+}
+
+body.light {
+  --bg: #f5f7f6;
+  --surface: #ffffff;
+  --surface-2: #f8faf9;
+  --surface-3: #eef2f0;
+
+  --text: #111513;
+  --text-muted: #5d6761;
+  --text-subtle: #89918c;
+
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.14);
+
+  --overlay: rgba(0, 0, 0, 0.48);
+}
+
