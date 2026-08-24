@@ -21,6 +21,8 @@ body {
   display: flex;
   flex-direction: column;
 
+  overflow-x: clip;
+
   background: var(--bg);
   color: var(--text);
 

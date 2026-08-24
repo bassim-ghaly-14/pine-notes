@@ -18,15 +18,17 @@
     </div>
 
     <div class="header-actions">
-      <input type="text" id="searchInput" placeholder="Search notes…" aria-label="Search notes" />
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Search notes…" aria-label="Search notes" autocomplete="off" />
 
-      <button id="clearSearchBtn" type="button" aria-label="Clear search" hidden>
-        ✕
-      </button>
+        <button id="clearSearchBtn" type="button" aria-label="Clear search" hidden>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
 
-      <button id="themeBtn" type="button" aria-label="Toggle light / dark theme">☾</button>
+      <button id="themeBtn" type="button" aria-label="Toggle light / dark theme"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 
-      <button id="openSettingsBtn" type="button" aria-label="Open settings">⚙</button>
+      <button id="openSettingsBtn" type="button" aria-label="Open settings"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
 
@@ -66,12 +68,12 @@
         <button type="button" class="md-btn" data-md="italic" aria-label="Italic (Ctrl/Cmd+I)" title="Italic"><em>I</em></button>
         <button type="button" class="md-btn" data-md="strike" aria-label="Strikethrough" title="Strikethrough"><s>S</s></button>
         <button type="button" class="md-btn" data-md="code" aria-label="Inline code" title="Inline code">&lt;/&gt;</button>
-        <button type="button" class="md-btn" data-md="link" aria-label="Link (Ctrl/Cmd+K)" title="Link">🔗</button>
-        <button type="button" class="md-btn" data-md="ul" aria-label="Bulleted list" title="Bulleted list">• —</button>
+        <button type="button" class="md-btn" data-md="link" aria-label="Link (Ctrl/Cmd+K)" title="Link"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+        <button type="button" class="md-btn" data-md="ul" aria-label="Bulleted list" title="Bulleted list"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
         <button type="button" class="md-btn" data-md="ol" aria-label="Numbered list" title="Numbered list">1.</button>
         <button type="button" class="md-btn" data-md="quote" aria-label="Quote" title="Quote">&ldquo;&rdquo;</button>
         <button type="button" class="md-btn" data-md="codeblock" aria-label="Code block" title="Code block">{ }</button>
-        <button type="button" class="md-btn" data-md="check" aria-label="Checkbox" title="Checkbox">☑</button>
+        <button type="button" class="md-btn" data-md="check" aria-label="Checkbox" title="Checkbox"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M8.5 12.2l2.6 2.6 4.9-5.6"/></svg></button>
       </div>
 
       <div id="previewPane" class="preview-pane md" role="tabpanel" aria-label="Preview" hidden tabindex="0"></div>
@@ -134,11 +136,19 @@
 
   </main>
 
-  <footer class="footer">
-    <p>
-      © <span id="currentYear"></span> — Pi-Notes
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <span class="footer-logo">Pi-Notes</span>
+      <span class="footer-divider" aria-hidden="true"></span>
+      <span class="footer-tagline">Simple notes. Clear mind.</span>
+    </div>
+
+    <p class="footer-copyright">
+      © <span id="currentYear"></span> Pi-Notes
     </p>
-  </footer>
+  </div>
+</footer>
 
   <div id="toast" role="status" aria-live="polite"></div>
 

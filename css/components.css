@@ -55,7 +55,7 @@
   margin-bottom: 12px;
 
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .note-form textarea {
@@ -166,6 +166,68 @@
 
 #cancelEditBtn:hover {
   background: var(--border-strong);
+}
+
+
+/* =========================================================
+   Destructive Buttons (.danger-btn)
+   Soft by default, fills on hover. Height comes from
+   context (toolbar / modal) to stay consistent.
+   ========================================================= */
+
+.danger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 13px;
+
+  border: 1px solid color-mix(in srgb, var(--danger) 38%, transparent);
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+  color: var(--danger);
+
+  cursor: pointer;
+
+  font-size: 0.76rem;
+  font-weight: 650;
+  white-space: nowrap;
+
+  transition:
+    background var(--ease),
+    border-color var(--ease),
+    color var(--ease);
+}
+
+.danger-btn:hover {
+  border-color: var(--danger);
+
+  background: var(--danger-soft);
+}
+
+.modal-actions .danger-btn {
+  border-radius: var(--radius-md);
+
+  font-size: 0.85rem;
+}
+
+.toolbar .danger-btn {
+  height: 34px;
+}
+
+.toolbar .danger-btn::before {
+  content: "";
+
+  width: 13px;
+  height: 13px;
+
+  background: currentColor;
+
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M3 6h18M8 6V4h8v2m-9 0v13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6'/%3E%3C/svg%3E")
+    center / contain no-repeat;
 }
 
 
@@ -395,7 +457,7 @@
 }
 
 .note-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
 
   border-color: var(--border-strong);
 
@@ -444,15 +506,19 @@
   top: 15px;
   right: 15px;
 
-  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  border-radius: 7px;
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  border-radius: var(--radius-sm);
 
   background: var(--warning-soft);
   color: var(--warning);
-
-  font-size: 0.65rem;
-  font-weight: 700;
 }
 
 
@@ -559,6 +625,12 @@
 }
 
 .note-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
   min-width: 0;
   min-height: 38px;
 
@@ -574,6 +646,10 @@
   transition:
     transform var(--ease),
     filter var(--ease);
+}
+
+.note-actions button svg {
+  flex-shrink: 0;
 }
 
 .note-actions button:hover {
@@ -777,16 +853,60 @@
    ========================================================= */
 
 .empty-notes {
-  padding: 60px 24px;
+  grid-column: 1 / -1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 56px 24px;
 
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-xl);
 
   background: var(--surface);
 
+  text-align: center;
+}
+
+.empty-notes::before {
+  content: "";
+
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 14px;
+
+  background: var(--text-subtle);
+
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z'/%3E%3Cpath d='M14 2v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+
+  opacity: 0.75;
+}
+
+.empty-notes h3 {
+  margin-bottom: 6px;
+
+  color: var(--text);
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  letter-spacing: -0.01em;
+}
+
+.empty-notes p {
+  max-width: 380px;
+
   color: var(--text-muted);
 
-  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.6;
+
+  overflow-wrap: anywhere;
 }
 
 
@@ -927,14 +1047,17 @@ mark {
 }
 
 .modal.wide {
-  width: min(100%, 480px);
+  width: min(100%, 520px);
   text-align: left;
 }
 
-.modal h3 {
-  margin-bottom: 8px;
+.modal h2 {
+  margin-bottom: 14px;
 
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: 750;
+
+  letter-spacing: -0.02em;
 }
 
 .modal p {
@@ -1149,15 +1272,28 @@ mark {
 .palette-close {
   position: absolute;
 
-  top: -32px;
+  top: -34px;
   right: 0;
 
+  padding: 5px 10px;
+
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+
   background: transparent;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.85);
 
   cursor: pointer;
 
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+
+  transition: color var(--ease), border-color var(--ease);
+}
+
+.palette-close:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
 }
 
 
@@ -1169,8 +1305,12 @@ mark {
   margin-bottom: 18px;
 }
 
-.settings-group h4 {
-  margin-bottom: 8px;
+.settings-group h3 {
+  margin-bottom: 10px;
+
+  padding-bottom: 8px;
+
+  border-bottom: 1px solid var(--border);
 
   color: var(--text-subtle);
 
@@ -1343,6 +1483,10 @@ mark {
 }
 
 .md-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   min-width: 34px;
   height: 30px;
   padding-inline: 8px;
@@ -1356,6 +1500,12 @@ mark {
     background var(--ease),
     color var(--ease),
     border-color var(--ease);
+}
+
+.md-btn svg {
+  flex-shrink: 0;
+
+  opacity: 0.85;
 }
 
 .md-btn:hover {
@@ -1501,6 +1651,8 @@ body.light .md-link {
   }
 
   .md-btn {
-    flex: 1 0 auto;
+    flex: 0 1 auto;
+    min-width: 32px;
+    padding-inline: 6px;
   }
 }

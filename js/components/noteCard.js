@@ -221,7 +221,7 @@ export function createEmptyState(view, isSearch) {
   const messages = {
     active: isSearch
       ? ["No Matching Notes", `No notes found for "${isSearch}".`]
-      : ["No Notes Found", "Try adding a new note ✨"],
+      : ["No Notes Found", "Try adding a new note."],
     archive: isSearch
       ? ["No Matching Archived Notes", `Nothing archived matches "${isSearch}".`]
       : ["No Archived Notes", "Notes you archive will appear here."],
