@@ -2,47 +2,161 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pi-Notes</title>
 
-  <link rel="stylesheet" href="css/master.css"/>
+  <link rel="stylesheet" href="css/master.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <script defer type="module" src="js/app.js"></script>
 </head>
+
 <body>
 
+  <!-- =========================================================
+       Header
+       ========================================================= -->
+
   <header class="header">
+
     <div class="logo">
-      <img width="120px" src="https://res.cloudinary.com/paihc5qx/image/upload/v1787515715/Pi-notes_jrppfq.png" alt="Pi-Notes">
+      <img
+        width="120"
+        src="https://res.cloudinary.com/paihc5qx/image/upload/v1787515715/Pi-notes_jrppfq.png"
+        alt="Pi-Notes"
+      >
     </div>
 
     <div class="header-actions">
-      <div class="search-wrap">
-        <input type="text" id="searchInput" placeholder="Search notes…" aria-label="Search notes" autocomplete="off" />
 
-        <button id="clearSearchBtn" type="button" aria-label="Clear search" hidden>
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      <div class="search-wrap">
+
+        <label class="sr-only" for="searchInput">
+          Search notes
+        </label>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search notes…"
+          aria-label="Search notes"
+          autocomplete="off"
+        />
+
+        <button
+          id="clearSearchBtn"
+          type="button"
+          aria-label="Clear search"
+          hidden
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="13"
+            height="13"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
         </button>
+
       </div>
 
-      <button id="themeBtn" type="button" aria-label="Toggle light / dark theme"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <button
+        id="themeBtn"
+        type="button"
+        aria-label="Toggle light / dark theme"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
 
-      <button id="openSettingsBtn" type="button" aria-label="Open settings"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button
+        id="openSettingsBtn"
+        type="button"
+        aria-label="Open settings"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+      </button>
+
     </div>
+
   </header>
+
+
+  <!-- =========================================================
+       Main
+       ========================================================= -->
 
   <main class="container">
 
     <!-- Welcome / identity -->
-    <section class="welcome" id="welcome" aria-label="Overview">
-      <h1 id="welcomeGreeting">Welcome.</h1>
-      <p class="welcome-summary" id="welcomeSummary"></p>
-      <p class="welcome-streak" id="welcomeStreak"></p>
-      <div class="stats-strip" id="welcomeStats"></div>
+
+    <section
+      class="welcome"
+      id="welcome"
+      aria-label="Overview"
+    >
+      <h1 id="welcomeGreeting">
+        Welcome.
+      </h1>
+
+      <p
+        class="welcome-summary"
+        id="welcomeSummary"
+      ></p>
+
+      <p
+        class="welcome-streak"
+        id="welcomeStreak"
+      ></p>
+
+      <div
+        class="stats-strip"
+        id="welcomeStats"
+      ></div>
     </section>
 
+
+    <!-- =======================================================
+         Note Form
+         ======================================================= -->
+
     <section class="note-form">
+
+      <label
+        class="sr-only"
+        for="noteTitle"
+      >
+        Note title
+      </label>
 
       <input
         type="text"
@@ -51,51 +165,302 @@
         aria-label="Note title"
       />
 
+
+      <label
+        class="sr-only"
+        for="noteContent"
+      >
+        Note content
+      </label>
+
       <textarea
         id="noteContent"
         placeholder="Write your thoughts..."
         aria-label="Note content"
       ></textarea>
 
-      <div class="editor-tabs" id="editorTabs" role="tablist" aria-label="Editor mode" hidden>
-        <button type="button" class="editor-tab selected" id="tabWrite" role="tab" aria-selected="true" aria-controls="noteContent">Write</button>
-        <button type="button" class="editor-tab" id="tabPreview" role="tab" aria-selected="false" aria-controls="previewPane">Preview</button>
+
+      <!-- Editor tabs -->
+
+      <div
+        class="editor-tabs"
+        id="editorTabs"
+        role="tablist"
+        aria-label="Editor mode"
+        hidden
+      >
+
+        <button
+          type="button"
+          class="editor-tab selected"
+          id="tabWrite"
+          role="tab"
+          aria-selected="true"
+          aria-controls="noteContent"
+        >
+          Write
+        </button>
+
+        <button
+          type="button"
+          class="editor-tab"
+          id="tabPreview"
+          role="tab"
+          aria-selected="false"
+          aria-controls="previewPane"
+        >
+          Preview
+        </button>
+
       </div>
 
-      <div class="md-toolbar" id="mdToolbar" role="toolbar" aria-label="Markdown formatting" hidden>
-        <button type="button" class="md-btn" data-md="heading" aria-label="Heading" title="Heading">H</button>
-        <button type="button" class="md-btn" data-md="bold" aria-label="Bold (Ctrl/Cmd+B)" title="Bold"><strong>B</strong></button>
-        <button type="button" class="md-btn" data-md="italic" aria-label="Italic (Ctrl/Cmd+I)" title="Italic"><em>I</em></button>
-        <button type="button" class="md-btn" data-md="strike" aria-label="Strikethrough" title="Strikethrough"><s>S</s></button>
-        <button type="button" class="md-btn" data-md="code" aria-label="Inline code" title="Inline code">&lt;/&gt;</button>
-        <button type="button" class="md-btn" data-md="link" aria-label="Link (Ctrl/Cmd+K)" title="Link"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-        <button type="button" class="md-btn" data-md="ul" aria-label="Bulleted list" title="Bulleted list"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg></button>
-        <button type="button" class="md-btn" data-md="ol" aria-label="Numbered list" title="Numbered list">1.</button>
-        <button type="button" class="md-btn" data-md="quote" aria-label="Quote" title="Quote">&ldquo;&rdquo;</button>
-        <button type="button" class="md-btn" data-md="codeblock" aria-label="Code block" title="Code block">{ }</button>
-        <button type="button" class="md-btn" data-md="check" aria-label="Checkbox" title="Checkbox"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M8.5 12.2l2.6 2.6 4.9-5.6"/></svg></button>
+
+      <!-- Markdown toolbar -->
+
+      <div
+        class="md-toolbar"
+        id="mdToolbar"
+        role="toolbar"
+        aria-label="Markdown formatting"
+        hidden
+      >
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="heading"
+          aria-label="Heading"
+          title="Heading"
+        >
+          H
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="bold"
+          aria-label="Bold (Ctrl/Cmd+B)"
+          title="Bold"
+        >
+          <strong>B</strong>
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="italic"
+          aria-label="Italic (Ctrl/Cmd+I)"
+          title="Italic"
+        >
+          <em>I</em>
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="strike"
+          aria-label="Strikethrough"
+          title="Strikethrough"
+        >
+          <s>S</s>
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="code"
+          aria-label="Inline code"
+          title="Inline code"
+        >
+          &lt;/&gt;
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="link"
+          aria-label="Link (Ctrl/Cmd+K)"
+          title="Link"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="ul"
+          aria-label="Bulleted list"
+          title="Bulleted list"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="ol"
+          aria-label="Numbered list"
+          title="Numbered list"
+        >
+          1.
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="quote"
+          aria-label="Quote"
+          title="Quote"
+        >
+          &ldquo;&rdquo;
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="codeblock"
+          aria-label="Code block"
+          title="Code block"
+        >
+          { }
+        </button>
+
+        <button
+          type="button"
+          class="md-btn"
+          data-md="check"
+          aria-label="Checkbox"
+          title="Checkbox"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect
+              x="3.5"
+              y="3.5"
+              width="17"
+              height="17"
+              rx="3.5"
+            />
+            <path d="M8.5 12.2l2.6 2.6 4.9-5.6" />
+          </svg>
+        </button>
+
       </div>
 
-      <div id="previewPane" class="preview-pane md" role="tabpanel" aria-label="Preview" hidden tabindex="0"></div>
+
+      <!-- Markdown preview -->
+
+      <div
+        id="previewPane"
+        class="preview-pane md"
+        role="tabpanel"
+        aria-label="Preview"
+        hidden
+        tabindex="0"
+      ></div>
+
+
+      <!-- Form bottom -->
 
       <div class="form-bottom">
 
-        <div class="type-toggle" role="radiogroup" aria-label="Note type">
-          <button type="button" class="type-btn selected" data-note-type="text" role="radio" aria-checked="true">Note</button>
-          <button type="button" class="type-btn" data-note-type="task" role="radio" aria-checked="false">Task</button>
+        <div
+          class="type-toggle"
+          role="radiogroup"
+          aria-label="Note type"
+        >
+
+          <button
+            type="button"
+            class="type-btn selected"
+            data-note-type="text"
+            role="radio"
+            aria-checked="true"
+          >
+            Note
+          </button>
+
+          <button
+            type="button"
+            class="type-btn"
+            data-note-type="task"
+            role="radio"
+            aria-checked="false"
+          >
+            Task
+          </button>
+
         </div>
 
-        <select id="noteCategory" aria-label="Category">
+
+        <label
+          class="sr-only"
+          for="noteCategory"
+        >
+          Category
+        </label>
+
+        <select
+          id="noteCategory"
+          aria-label="Category"
+        >
         </select>
 
-        <div class="color-picker" id="colorPicker" role="radiogroup" aria-label="Note color">
+
+        <div
+          class="color-picker"
+          id="colorPicker"
+          role="radiogroup"
+          aria-label="Note color"
+        >
         </div>
 
-        <button id="cancelEditBtn" type="button" hidden>
+
+        <button
+          id="cancelEditBtn"
+          type="button"
+          hidden
+        >
           Cancel
         </button>
 
-        <button id="addNoteBtn" type="button">
+        <button
+          id="addNoteBtn"
+          type="button"
+        >
           Add Note
         </button>
 
@@ -103,26 +468,68 @@
 
     </section>
 
-    <nav class="view-tabs" id="viewTabs" aria-label="Note views">
+
+    <!-- =======================================================
+         View Tabs
+         ======================================================= -->
+
+    <nav
+      class="view-tabs"
+      id="viewTabs"
+      aria-label="Note views"
+    >
     </nav>
+
+
+    <!-- =======================================================
+         Toolbar
+         ======================================================= -->
 
     <div class="toolbar">
 
-      <div class="category-chips" id="categoryChips">
+      <div
+        class="category-chips"
+        id="categoryChips"
+      >
       </div>
+
 
       <div class="toolbar-right">
 
-        <label class="sort-label" for="sortSelect">Sort</label>
+        <label
+          class="sort-label"
+          for="sortSelect"
+        >
+          Sort
+        </label>
 
-        <select id="sortSelect" aria-label="Sort notes">
-          <option value="updated">Recently updated</option>
-          <option value="created">Recently created</option>
-          <option value="alpha">Alphabetical</option>
-          <option value="pinned">Pinned first</option>
+        <select
+          id="sortSelect"
+          aria-label="Sort notes"
+        >
+          <option value="updated">
+            Recently updated
+          </option>
+
+          <option value="created">
+            Recently created
+          </option>
+
+          <option value="alpha">
+            Alphabetical
+          </option>
+
+          <option value="pinned">
+            Pinned first
+          </option>
         </select>
 
-        <button id="emptyTrashBtn" type="button" class="danger-btn">
+
+        <button
+          id="emptyTrashBtn"
+          type="button"
+          class="danger-btn"
+        >
           Empty Trash
         </button>
 
@@ -130,48 +537,138 @@
 
     </div>
 
-    <section class="notes-grid" id="notesGrid">
 
+    <!-- =======================================================
+         Notes
+         ======================================================= -->
+
+    <section
+      class="notes-grid"
+      id="notesGrid"
+    >
     </section>
 
   </main>
 
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-brand">
-      <span class="footer-logo">Pi-Notes</span>
-      <span class="footer-divider" aria-hidden="true"></span>
-      <span class="footer-tagline">Simple notes. Clear mind.</span>
-    </div>
 
-    <p class="footer-copyright">
-      © <span id="currentYear"></span> Pi-Notes
-    </p>
-  </div>
-</footer>
+  <!-- =========================================================
+       Footer
+       ========================================================= -->
 
-  <div id="toast" role="status" aria-live="polite"></div>
+  <footer class="footer">
 
-  <!-- Import preview / confirmation dialog -->
-  <div class="modal-overlay" id="importModal" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
-    <div class="modal">
-      <h2 id="importModalTitle">Import Backup</h2>
-      <p id="importModalSummary"></p>
-      <p class="modal-note" id="importModalWarning"></p>
-      <div class="modal-actions import-actions">
-        <button id="importCancelBtn" type="button">Cancel</button>
-        <button id="importMergeBtn" type="button">Merge</button>
-        <button id="importReplaceBtn" type="button" class="danger-btn">Replace</button>
+    <div class="footer-content">
+
+      <div class="footer-brand">
+
+        <span class="footer-logo">
+          Pi-Notes
+        </span>
+
+        <span
+          class="footer-divider"
+          aria-hidden="true"
+        ></span>
+
+        <span class="footer-tagline">
+          Simple notes. Clear mind.
+        </span>
+
       </div>
-    </div>
-  </div>
 
-  <!-- Shared confirmation modal -->
-  <div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <p class="footer-copyright">
+        © <span id="currentYear"></span> Pi-Notes
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================================================
+       Toast
+       ========================================================= -->
+
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================================================
+       Import Preview / Confirmation Dialog
+       ========================================================= -->
+
+  <div
+    class="modal-overlay"
+    id="importModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="importModalTitle"
+  >
 
     <div class="modal">
 
-      <h2 id="modalTitle">Confirm</h2>
+      <h2 id="importModalTitle">
+        Import Backup
+      </h2>
+
+      <p id="importModalSummary"></p>
+
+      <p
+        class="modal-note"
+        id="importModalWarning"
+      ></p>
+
+      <div class="modal-actions import-actions">
+
+        <button
+          id="importCancelBtn"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="importMergeBtn"
+          type="button"
+        >
+          Merge
+        </button>
+
+        <button
+          id="importReplaceBtn"
+          type="button"
+          class="danger-btn"
+        >
+          Replace
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       Shared Confirmation Modal
+       ========================================================= -->
+
+  <div
+    class="modal-overlay"
+    id="confirmModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+
+    <div class="modal">
+
+      <h2 id="modalTitle">
+        Confirm
+      </h2>
 
       <p id="modalMessage">
         Are you sure?
@@ -179,11 +676,18 @@
 
       <div class="modal-actions">
 
-        <button id="modalCancel" type="button">
+        <button
+          id="modalCancel"
+          type="button"
+        >
           Cancel
         </button>
 
-        <button id="modalConfirm" type="button" class="danger-btn">
+        <button
+          id="modalConfirm"
+          type="button"
+          class="danger-btn"
+        >
           Confirm
         </button>
 
@@ -193,23 +697,63 @@
 
   </div>
 
-  <!-- Category manager modal -->
-  <div class="modal-overlay" id="manageCategoriesModal" role="dialog" aria-modal="true" aria-label="Manage categories">
+
+  <!-- =========================================================
+       Category Manager Modal
+       ========================================================= -->
+
+  <div
+    class="modal-overlay"
+    id="manageCategoriesModal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Manage categories"
+  >
 
     <div class="modal wide">
 
-      <h2>Manage Categories</h2>
+      <h2>
+        Manage Categories
+      </h2>
 
-      <div id="categoryList" class="category-list"></div>
+      <div
+        id="categoryList"
+        class="category-list"
+      ></div>
+
 
       <div class="category-add">
-        <input type="text" id="newCategoryName" placeholder="New category name…" aria-label="New category name"/>
-        <button id="addCategoryBtn" type="button">Add</button>
+
+        <label
+          class="sr-only"
+          for="newCategoryName"
+        >
+          New category name
+        </label>
+
+        <input
+          type="text"
+          id="newCategoryName"
+          placeholder="New category name…"
+          aria-label="New category name"
+        />
+
+        <button
+          id="addCategoryBtn"
+          type="button"
+        >
+          Add
+        </button>
+
       </div>
+
 
       <div class="modal-actions">
 
-        <button id="closeCategoriesBtn" type="button">
+        <button
+          id="closeCategoriesBtn"
+          type="button"
+        >
           Done
         </button>
 
@@ -219,9 +763,30 @@
 
   </div>
 
-  <!-- Command palette -->
-  <div class="modal-overlay palette-overlay" id="paletteOverlay">
-    <div class="palette" role="dialog" aria-modal="true" aria-label="Command palette">
+
+  <!-- =========================================================
+       Command Palette
+       ========================================================= -->
+
+  <div
+    class="modal-overlay palette-overlay"
+    id="paletteOverlay"
+  >
+
+    <div
+      class="palette"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette"
+    >
+
+      <label
+        class="sr-only"
+        for="paletteInput"
+      >
+        Search commands
+      </label>
+
       <input
         type="text"
         id="paletteInput"
@@ -231,73 +796,245 @@
         aria-autocomplete="list"
         autocomplete="off"
       />
-      <ul id="paletteList" role="listbox" aria-label="Commands"></ul>
-      <button id="paletteCloseBtn" type="button" class="palette-close" aria-label="Close command palette">Esc</button>
+
+      <ul
+        id="paletteList"
+        role="listbox"
+        aria-label="Commands"
+      ></ul>
+
+      <button
+        id="paletteCloseBtn"
+        type="button"
+        class="palette-close"
+        aria-label="Close command palette"
+      >
+        Esc
+      </button>
+
     </div>
+
   </div>
 
-  <!-- Settings modal -->
-  <div class="modal-overlay" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+
+  <!-- =========================================================
+       Settings Modal
+       ========================================================= -->
+
+  <div
+    class="modal-overlay"
+    id="settingsModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="settingsTitle"
+  >
+
     <div class="modal wide settings">
 
-      <h2 id="settingsTitle">Settings</h2>
+      <h2 id="settingsTitle">
+        Settings
+      </h2>
+
+
+      <!-- Appearance -->
 
       <div class="settings-group">
-        <h3>Appearance</h3>
-        <label for="settingTheme">Theme</label>
+
+        <h3>
+          Appearance
+        </h3>
+
+        <label for="settingTheme">
+          Theme
+        </label>
+
         <select id="settingTheme">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="system">System</option>
+
+          <option value="light">
+            Light
+          </option>
+
+          <option value="dark">
+            Dark
+          </option>
+
+          <option value="system">
+            System
+          </option>
+
         </select>
+
       </div>
 
+
+      <!-- Notes -->
+
       <div class="settings-group">
-        <h3>Notes</h3>
-        <label for="settingSort">Default sort</label>
+
+        <h3>
+          Notes
+        </h3>
+
+        <label for="settingSort">
+          Default sort
+        </label>
+
         <select id="settingSort">
-          <option value="updated">Recently updated</option>
-          <option value="created">Recently created</option>
-          <option value="alpha">Alphabetical</option>
-          <option value="pinned">Pinned first</option>
+
+          <option value="updated">
+            Recently updated
+          </option>
+
+          <option value="created">
+            Recently created
+          </option>
+
+          <option value="alpha">
+            Alphabetical
+          </option>
+
+          <option value="pinned">
+            Pinned first
+          </option>
+
         </select>
+
       </div>
+
+
+      <!-- Confirm delete -->
 
       <div class="settings-group settings-row">
-        <label for="settingConfirmDelete">Confirm before permanent delete</label>
-        <input type="checkbox" id="settingConfirmDelete" />
+
+        <label for="settingConfirmDelete">
+          Confirm before permanent delete
+        </label>
+
+        <input
+          type="checkbox"
+          id="settingConfirmDelete"
+        />
+
       </div>
+
+
+      <!-- Markdown -->
 
       <div class="settings-group settings-row">
-        <label for="settingMarkdown">Markdown</label>
-        <input type="checkbox" id="settingMarkdown" />
+
+        <label for="settingMarkdown">
+          Markdown
+        </label>
+
+        <input
+          type="checkbox"
+          id="settingMarkdown"
+        />
+
       </div>
-      <p class="modal-note">Render note content as Markdown. Off shows plain text.</p>
+
+      <p class="modal-note">
+        Render note content as Markdown. Off shows plain text.
+      </p>
+
+
+      <!-- Profile -->
 
       <div class="settings-group">
-        <h3>Profile</h3>
-        <label for="settingDisplayName">Display name (optional)</label>
-        <input type="text" id="settingDisplayName" placeholder="How should we greet you?" maxlength="60" />
+
+        <h3>
+          Profile
+        </h3>
+
+        <label for="settingDisplayName">
+          Display name (optional)
+        </label>
+
+        <input
+          type="text"
+          id="settingDisplayName"
+          placeholder="How should we greet you?"
+          maxlength="60"
+        />
+
       </div>
 
+
+      <!-- Data -->
+
       <div class="settings-group">
-        <h3>Data</h3>
-        <p class="modal-note">Back up your notes to a file, or restore from a previous backup.</p>
+
+        <h3>
+          Data
+        </h3>
+
+        <p class="modal-note">
+          Back up your notes to a file, or restore from a previous backup.
+        </p>
+
         <div class="data-actions">
-          <button id="exportDataBtn" type="button">Export Backup</button>
-          <button id="importDataBtn" type="button">Import Backup…</button>
+
+          <button
+            id="exportDataBtn"
+            type="button"
+          >
+            Export Backup
+          </button>
+
+          <button
+            id="importDataBtn"
+            type="button"
+          >
+            Import Backup…
+          </button>
+
         </div>
-        <input type="file" id="importFileInput" accept="application/json,.json" hidden />
+
+
+        <label
+          class="sr-only"
+          for="importFileInput"
+        >
+          Import backup file
+        </label>
+
+        <input
+          type="file"
+          id="importFileInput"
+          accept="application/json,.json"
+          hidden
+        />
+
       </div>
 
-      <p class="modal-note">Longest streak: <span id="settingLongestStreak">0 days</span></p>
+
+      <!-- Streak -->
+
+      <p class="modal-note">
+        Longest streak:
+        <span id="settingLongestStreak">
+          0 days
+        </span>
+      </p>
+
+
+      <!-- Actions -->
 
       <div class="modal-actions">
-        <button id="closeSettingsBtn" type="button">Done</button>
+
+        <button
+          id="closeSettingsBtn"
+          type="button"
+        >
+          Done
+        </button>
+
       </div>
 
     </div>
+
   </div>
+
 
 </body>
 </html>
