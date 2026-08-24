@@ -1,132 +1,550 @@
-# Pine Notes
+# 🍍 Pine Notes
 
-A fast, private, Apple-inspired notes app that runs entirely in your browser.
-No accounts, no backend, no dependencies — your notes never leave your device.
+> A fast, private, distraction-free notes app built for people who want their notes to stay theirs.
 
-## Features
+**Pine Notes** is a lightweight, Apple-inspired notes application that runs entirely in your browser.
 
-- **Notes** — create, edit, and organize rich text notes with 6 color accents
-- **Categories** — group notes and filter by category chips with live counts
-- **Search** — instant, debounced full-text search with match highlighting
-- **Sorting** — recently updated / created, alphabetical, or pinned first
-- **Pinning** — keep important notes at the top
-- **Archive** — hide notes without deleting them
-- **Trash** — 30-day safety net with restore, then automatic purge
-- **Undo** — one-tap undo (toast button or Ctrl/Cmd+Z) for destructive actions
-- **Tasks** — task-type notes with checklists and progress bars
-- **Daily Streak** — motivational streak tracking for real productivity
-- **Markdown** — built-in editor toolbar, Write/Preview tabs, safe rendering
-- **Command Palette** — Ctrl/Cmd+K to jump to any command
-- **Keyboard Shortcuts** — full keyboard-driven workflow
-- **Import / Export** — JSON backups with merge or replace strategies
-- **Themes** — Light, Dark, and System (follows OS preference)
-- **Responsive UI** — usable from 320px phones to wide desktops
-- **Accessibility** — focus trapping dialogs, ARIA roles, keyboard navigation
-- **LocalStorage persistence** — versioned schema (v4), zero setup
+No account.  
+No backend.  
+No database.  
+No tracking.  
+No external dependencies.
 
-## Keyboard Shortcuts
+Your notes are stored locally on your device using the browser's **LocalStorage API**.
 
-| Shortcut | Action |
-| --- | --- |
-| `N` | Start a new note |
-| `/` | Focus search |
-| `S` | Open settings |
-| `Ctrl/Cmd + K` | Command palette (or insert a link, while editing a note) |
-| `Ctrl/Cmd + B` | Bold (in note editor) |
-| `Ctrl/Cmd + I` | Italic (in note editor) |
-| `Ctrl/Cmd + Z` | Undo last destructive action (when available) |
-| `↑` / `↓` + `Enter` | Navigate & run command palette results |
-| `←` / `→` | Switch Write / Preview tabs |
-| `Esc` | Close modal, dialog, or palette |
+---
 
-Shortcuts never fire while typing in inputs unless explicitly intended.
+## ✨ Why Pine Notes?
 
-## Architecture
+Most note-taking apps require an account, a server, or some kind of cloud infrastructure.
 
-```
-index.html            single-page shell
-css/
-  master.css          stylesheet entry point (import order matters)
-  tokens.css          design tokens: colors, radii, shadows, motion
-  base.css            reset, element defaults, focus rings, reduced motion
-  layout.css          app shell, header, sections, grid, breakpoints
-  components.css      reusable component styles
-js/
-  app.js              entry point — boot order + wiring only
-  state/
-    store.js          central state tree + pub/sub
-    actions.js        the ONLY mutation API (validates → mutates → persists)
-    undo.js           single-action undo registry
-  services/
-    storage.js        localStorage access, v1→v4 migration, corruption quarantine
-    dataTransfer.js   export/import/merge logic (pure)
-    theme.js          light/dark/system application
-    streak.js         daily-streak math (pure)
-  features/           orchestration: notes, categories, views, editor,
-                      palette, shortcuts, settings, dataManager, welcome
-  components/         DOM construction: noteCard, confirmModal, toast
-  events/delegate.js  delegated event handling (no inline handlers)
-  utils/              pure helpers: markdown renderer, highlight, focus trap,
-                      format, id, dom queries
-tests/                node:test suites (`npm test`)
-```
+Pine Notes takes a different approach:
 
-Ownership rules: **state** owns data · **actions** are the only mutation API ·
-**services** own browser/storage infrastructure · **features** orchestrate ·
-**components** build DOM · **utils** are pure.
+> **Your notes don't need to leave your device.**
 
-## Data
+Everything happens locally in your browser, making Pine Notes:
 
-All data lives in your browser's LocalStorage under the key `pine-notes:v2`
-as a single versioned envelope:
+- ⚡ Fast
+- 🔒 Private by design
+- 📦 Portable
+- 🌐 Offline-friendly
+- 🧩 Dependency-free
+- 📱 Responsive across devices
 
-```json
-{ "version": 4, "savedAt": "…", "notes": [], "categories": [], "settings": {}, "streak": {} }
-```
+---
 
-Legacy formats (v1–v3) migrate automatically on first load. Corrupted
-payloads are quarantined under `pine-notes:corrupt-backup` instead of being
-destroyed. Trashed notes purge automatically after 30 days. Use
-**Settings → Data → Export Backup** for portable JSON snapshots.
+## 🚀 Features
 
-## Security
+### 📝 Notes
 
-- **XSS-safe DOM rendering** — all user content enters the DOM via
-  `textContent` / `createTextNode`; no user string is ever parsed as HTML.
-- **Markdown sanitization** — raw HTML is treated as plain text; link URLs
-  pass a protocol allowlist (http/https/mailto only), so `javascript:` URLs
-  render inert.
-- **Validated imports** — backup files are shape- and version-checked before
-  anything touches your data; validation failure is atomic (no partial state).
-- No inline event handlers, no `eval`, no external network calls.
+Create, edit, organize, pin, archive, and delete notes with a clean distraction-free editor.
 
-## Tech Stack
+- Rich note editing
+- 6 note color accents
+- Pin important notes
+- Archive notes
+- Trash & restore
+- Automatic permanent deletion after 30 days
+- Destructive-action undo
 
-- HTML5
-- CSS3 (custom properties, grid, container-friendly media queries)
-- Vanilla JavaScript (ES Modules) — zero runtime dependencies
-- LocalStorage API
-- Web APIs: File/Blob export, `prefers-color-scheme`, `prefers-reduced-motion`
+---
 
-## Getting Started
+### ✅ Tasks
 
-1. Clone or download this repository
-2. Open `index.html` in any modern browser (or serve the folder statically)
-3. Start writing — everything persists locally, instantly
+Turn notes into actionable tasks.
 
-Run the test suite with:
+- Task-based notes
+- Interactive checklists
+- Completion tracking
+- Progress indicators
 
-```sh
+---
+
+### 🗂️ Organization
+
+Keep your notes organized without complicated folder systems.
+
+- Custom categories
+- Category filtering
+- Live category counts
+- Recently updated
+- Recently created
+- Alphabetical sorting
+- Pinned-first sorting
+
+---
+
+### 🔎 Search
+
+Find anything instantly.
+
+- Debounced search
+- Full-text search
+- Match highlighting
+- Keyboard shortcut support
+- Clear search action
+
+Press:
+
+```text
+/
+
+to focus the search field.
+
+⸻
+
+📝 Markdown
+
+Write notes using Markdown without leaving the editor.
+
+* Heading
+* Bold
+* Italic
+* Strikethrough
+* Inline code
+* Links
+* Bulleted lists
+* Numbered lists
+* Quotes
+* Code blocks
+* Checkboxes
+* Write / Preview modes
+* Safe Markdown rendering
+
+Markdown can be enabled or disabled from:
+
+Settings → Markdown
+
+⸻
+
+⚡ Command Palette
+
+Navigate Pine Notes using commands instead of menus.
+
+Open it with:
+
+Ctrl/Cmd + K
+
+Search commands and execute actions without reaching for the mouse.
+
+⸻
+
+⌨️ Keyboard-First Workflow
+
+Pine Notes is designed to be usable without constantly switching between keyboard and mouse.
+Shortcut	Action
+N	Create a new note
+/	Focus search
+S	Open settings
+Ctrl/Cmd + K	Open command palette
+Ctrl/Cmd + B	Bold text
+Ctrl/Cmd + I	Italic text
+Ctrl/Cmd + Z	Undo destructive action
+↑ / ↓	Navigate command results
+Enter	Execute selected command
+← / →	Switch Write / Preview
+Esc	Close modal or palette
+
+Shortcuts are automatically ignored while typing in regular inputs unless the shortcut is intentionally supported there.
+
+⸻
+
+🎨 Themes
+
+Pine Notes supports three appearance modes:
+
+* Light
+* Dark
+* System
+
+The System option automatically follows your operating system preference.
+
+⸻
+
+📱 Responsive by Design
+
+The interface is designed to work across a wide range of screen sizes:
+
+320px phones
+      ↓
+Mobile
+      ↓
+Tablet
+      ↓
+Desktop
+      ↓
+Wide screens
+
+The UI adapts dynamically across:
+
+* Header
+* Search
+* Note editor
+* Toolbars
+* Categories
+* Note grid
+* Modals
+* Settings
+* Empty states
+* Footer
+
+No separate mobile application is required.
+
+⸻
+
+♿ Accessibility
+
+Accessibility is treated as part of the UI architecture rather than an afterthought.
+
+Pine Notes includes:
+
+* Semantic HTML
+* ARIA roles and labels
+* Keyboard navigation
+* Focus management
+* Modal focus trapping
+* Visible focus states
+* Reduced-motion support
+* Keyboard-accessible command palette
+* Proper form labels
+
+⸻
+
+🔐 Privacy & Security
+
+Privacy is one of the core design decisions behind Pine Notes.
+
+Your data stays local
+
+Pine Notes does not send your notes to a server.
+
+There is:
+
+* No authentication
+* No backend
+* No database
+* No analytics service
+* No tracking
+* No external API
+* No cloud synchronization
+
+Your data is stored in your browser’s LocalStorage.
+
+XSS Protection
+
+User-generated content is inserted into the DOM using safe DOM APIs such as:
+
+textContent
+createTextNode
+User strings are never directly injected as HTML.
+Markdown Security
+Markdown rendering is intentionally restricted.
+* Raw HTML is treated as plain text
+* Link URLs are validated
+* Allowed protocols include:
+    * http
+    * https
+    * mailto
+Potentially dangerous URLs such as:
+
+javascript:
+
+are rejected and rendered inert.
+
+Import Validation
+
+Imported backups are validated before they can modify application state.
+
+Invalid or corrupted imports:
+
+* Do not partially modify existing data
+* Are rejected atomically
+* Cannot overwrite valid state with malformed data
+
+⸻
+
+💾 Data & Backups
+
+Pine Notes stores application data locally using a versioned storage envelope.
+
+{
+  "version": 4,
+  "savedAt": "…",
+  "notes": [],
+  "categories": [],
+  "settings": {},
+  "streak": {}
+}
+
+The storage layer automatically handles legacy versions.
+
+Automatic Migration
+
+Previous schemas are migrated automatically:
+
+v1 → v2 → v3 → v4
+
+Users don’t need to manually migrate their data.
+
+Corruption Protection
+
+If stored data becomes corrupted, Pine Notes quarantines the payload instead of silently destroying it.
+
+pine-notes:corrupt-backup
+
+Trash Retention
+
+Deleted notes remain recoverable for:
+
+30 days
+
+After that period, they are automatically purged.
+
+Manual Backups
+
+Backups can be exported from:
+
+Settings → Data → Export Backup
+
+Backups can later be restored using:
+
+Settings → Data → Import Backup
+
+Import supports:
+
+* Merge
+* Replace
+
+⸻
+
+🧠 Architecture
+
+Pine Notes intentionally uses a small, dependency-free architecture.
+
+pine-notes/
+│
+├── index.html
+│
+├── css/
+│   ├── master.css
+│   ├── tokens.css
+│   ├── base.css
+│   ├── layout.css
+│   └── components.css
+│
+├── js/
+│   ├── app.js
+│   │
+│   ├── state/
+│   │   ├── store.js
+│   │   ├── actions.js
+│   │   └── undo.js
+│   │
+│   ├── services/
+│   │   ├── storage.js
+│   │   ├── dataTransfer.js
+│   │   ├── theme.js
+│   │   └── streak.js
+│   │
+│   ├── features/
+│   │   ├── notes
+│   │   ├── categories
+│   │   ├── views
+│   │   ├── editor
+│   │   ├── palette
+│   │   ├── shortcuts
+│   │   ├── settings
+│   │   ├── dataManager
+│   │   └── welcome
+│   │
+│   ├── components/
+│   │   ├── noteCard.js
+│   │   ├── confirmModal.js
+│   │   └── toast.js
+│   │
+│   ├── events/
+│   │   └── delegate.js
+│   │
+│   └── utils/
+│       ├── markdown
+│       ├── highlight
+│       ├── focusTrap
+│       ├── format
+│       ├── id
+│       └── dom
+│
+└── tests/
+
+Architecture Rules
+
+The application follows clear ownership boundaries:
+
+State
+  ↓
+owns application data
+
+Actions
+  ↓
+the only mutation API
+
+Services
+  ↓
+browser/storage infrastructure
+
+Features
+  ↓
+application orchestration
+
+Components
+  ↓
+DOM construction
+
+Utils
+  ↓
+pure reusable helpers
+
+Ownership
+Layer	Responsibility
+state	Application state
+actions	State mutations
+services	Storage and browser APIs
+features	Feature orchestration
+components	DOM construction
+utils	Pure reusable logic
+events	Event delegation
+
+This separation keeps the application predictable and makes individual features easier to maintain and test.
+
+⸻
+
+🧪 Testing
+
+Pine Notes includes automated Node.js tests.
+
+Run:
+
 npm test
+The test suite covers core application behavior including:
+* State management
+* Actions
+* Storage
+* Migration
+* Data validation
+* Import/export
+* Undo behavior
+* Streak calculations
+* Utility functions
+
+⸻
+
+🛠️ Tech Stack
+Pine Notes intentionally avoids frameworks and runtime dependencies.
+Core
+* HTML5
+* CSS3
+* Vanilla JavaScript
+* ES Modules
+Browser APIs
+* LocalStorage
+* File API
+* Blob API
+* prefers-color-scheme
+* prefers-reduced-motion
+Testing
+* Node.js
+* node:test
+Runtime Dependencies
+0
+
+No React.
+No Vue.
+No framework.
+No UI library.
+No runtime dependency.
+
+Just the browser.
+
+⸻
+
+🚀 Getting Started
+
+1. Clone the repository
+
+git clone <repository-url>
+cd pine-notes
+
+. Run the app
+
+Pine Notes is a static application.
+
+You can serve the project with any static server.
+
+For example:
+
+npx serve .
+
+Then open the provided local URL in your browser.
+
+You can also open index.html directly in most modern browsers.
+
+3. Run tests
+
+npm test
+
+📦 Project Philosophy
+
+Pine Notes is intentionally small.
+
+The goal isn’t to recreate every feature of a cloud-based productivity platform.
+
+Instead, the project focuses on:
+
+Simplicity
+   +
+Privacy
+   +
+Performance
+   +
+Good UX
+   +
+Maintainable Architecture
+
+Every feature should justify its complexity.
+
+If something can be solved with a browser API instead of a dependency, Pine Notes prefers the browser API.
+
+⸻
+
+🗺️ Roadmap
+
+The following features are intentionally postponed:
+
+V3+
+
+* Cloud synchronization
+* Multi-device synchronization
+* Authentication
+* Collaboration
+* Rich Text editor
+* Drag & Drop note reordering
+
+These features are not part of the current architecture because they introduce fundamentally different infrastructure requirements.
+
+⸻
+
+🤝 Contributing
+
+Contributions, ideas, and feedback are welcome.
+
+Before adding a feature, consider:
+
+1. Does it preserve the local-first philosophy?
+2. Does it introduce unnecessary dependencies?
+3. Does it affect existing state ownership?
+4. Is it accessible?
+5. Does it work across mobile and desktop?
+6. Can it be tested independently?
+
+  Built with vanilla JavaScript, CSS, and a lot of attention to detail.
+  Pine Notes — Your notes. Your device. Your data.
 ```
-
-## Future / V3
-
-Deliberately postponed:
-
-- Cloud Sync & multi-device sync
-- Authentication
-- Collaboration
-- Rich Text editor
-- Drag & Drop reordering
-
