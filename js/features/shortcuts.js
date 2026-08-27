@@ -16,82 +16,156 @@ import { setEditing } from "../state/actions.js";
 import { isEditorFocused, editorShortcuts } from "./editor.js";
 import { byId } from "../utils/dom.js";
 
-const TYPING_TARGETS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+const TYPING_TARGETS = new Set([
+  "INPUT",
+  "TEXTAREA",
+  "SELECT",
+]);
 
 function isTyping(event) {
   const target = event.target;
-  if (!(target instanceof Element)) return false;
+
+  if (!(target instanceof Element)) {
+    return false;
+  }
+
   return (
-    TYPING_TARGETS.has(target.tagName) || target.isContentEditable === true
+    TYPING_TARGETS.has(target.tagName) ||
+    target.isContentEditable === true
   );
+}
+
+function handleEditorShortcut(event, key) {
+  if (
+    !event.metaKey &&
+    !event.ctrlKey ||
+    event.shiftKey ||
+    !isEditorFocused()
+  ) {
+    return false;
+  }
+
+  const shortcuts = {
+    b: editorShortcuts.bold,
+    i: editorShortcuts.italic,
+    k: editorShortcuts.link,
+  };
+
+  const shortcut = shortcuts[key];
+
+  if (!shortcut) {
+    return false;
+  }
+
+  event.preventDefault();
+  shortcut();
+
+  return true;
+}
+
+function handlePaletteShortcut(event, key) {
+  const meta = event.metaKey || event.ctrlKey;
+
+  if (!meta || key !== "k") {
+    return false;
+  }
+
+  event.preventDefault();
+  togglePalette();
+
+  return true;
+}
+
+function handleUndoShortcut(event, key) {
+  const meta = event.metaKey || event.ctrlKey;
+
+  if (!meta || key !== "z") {
+    return false;
+  }
+
+  if (getPendingUndo() && !isTyping(event)) {
+    event.preventDefault();
+    consumeUndo();
+  }
+
+  return true;
+}
+
+function focusSearch() {
+  event.preventDefault();
+  byId("searchInput")?.focus();
+}
+
+function startNewNote() {
+  setEditing(null);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+  byId("noteTitle")?.focus();
+}
+
+function handleSingleKeyShortcut(event, key, openSettings) {
+  if (
+    event.metaKey ||
+    event.ctrlKey ||
+    event.altKey ||
+    isTyping(event)
+  ) {
+    return false;
+  }
+
+  const actions = {
+    "/": () => {
+      event.preventDefault();
+      byId("searchInput")?.focus();
+    },
+
+    s: () => {
+      event.preventDefault();
+      openSettings?.();
+    },
+
+    n: () => {
+      event.preventDefault();
+      startNewNote();
+    },
+  };
+
+  const action = actions[key];
+
+  if (!action) {
+    return false;
+  }
+
+  action();
+  return true;
+}
+
+function handleKeydown(event, openSettings) {
+  const key = event.key.toLowerCase();
+
+  if (handleEditorShortcut(event, key)) {
+    return;
+  }
+
+  if (handlePaletteShortcut(event, key)) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    return;
+  }
+
+  if (handleUndoShortcut(event, key)) {
+    return;
+  }
+
+  handleSingleKeyShortcut(event, key, openSettings);
 }
 
 export function initShortcuts({ openSettings } = {}) {
   document.addEventListener("keydown", (event) => {
-    const meta = event.metaKey || event.ctrlKey;
-    const key = event.key.toLowerCase();
-
-    // --- In-editor Markdown shortcuts (only while editing the note) ---
-    if (meta && !event.shiftKey && isEditorFocused()) {
-      if (key === "b") {
-        event.preventDefault();
-        editorShortcuts.bold();
-        return;
-      }
-      if (key === "i") {
-        event.preventDefault();
-        editorShortcuts.italic();
-        return;
-      }
-      if (key === "k") {
-        // Editor owns Ctrl/Cmd+K ONLY when the note textarea has focus.
-        event.preventDefault();
-        editorShortcuts.link();
-        return;
-      }
-    }
-
-    // --- Global command palette ---
-    if (meta && key === "k") {
-      event.preventDefault();
-      togglePalette();
-      return;
-    }
-
-    if (event.key === "Escape") {
-      // Modals/palette close themselves via their own Escape listeners.
-      return;
-    }
-
-    // --- Undo (only when a pending undo exists and not while typing) ---
-    if (meta && event.key.toLowerCase() === "z") {
-      if (getPendingUndo() && !isTyping(event)) {
-        event.preventDefault();
-        consumeUndo();
-      }
-      return;
-    }
-
-    // --- Single-key shortcuts: never while typing ---
-    if (meta || event.altKey || isTyping(event)) return;
-
-    if (event.key === "/") {
-      event.preventDefault(); // stop browsers' quick-find
-      byId("searchInput")?.focus();
-      return;
-    }
-
-    if (event.key.toLowerCase() === "s") {
-      event.preventDefault();
-      openSettings?.();
-      return;
-    }
-
-    if (event.key.toLowerCase() === "n") {
-      event.preventDefault();
-      setEditing(null); // ensure create mode
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      byId("noteTitle")?.focus();
-    }
+    handleKeydown(event, openSettings);
   });
 }
