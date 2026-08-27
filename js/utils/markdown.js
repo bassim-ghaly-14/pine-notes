@@ -83,7 +83,7 @@ const INLINE_RULES = [
   },
   {
     t: "link",
-    re: /^$begin:math:display$\(\[\^$end:math:display$\n]*)\]$begin:math:text$\(\[\^\(\)\\s\]\+\)$end:math:text$/,
+    re: /^\[([^\]\n]*)\]\(([^()\s]+)\)/,
   },
 ];
 
@@ -187,7 +187,7 @@ function createLinkNode(match) {
 /* Block parsing                                                       */
 /* ------------------------------------------------------------------ */
 
-const CHECKBOX_RE = /^$begin:math:display$\(\[ xX\]\)$end:math:display$\s+(.*)$/;
+const CHECKBOX_RE = /^\[([ xX])\]\s+(.*)$/;
 const SPECIAL_LINE_RE =
   /^(#{1,3}\s|>|```|\s*[-*]\s|\s*\d+[.)]\s)/;
 
