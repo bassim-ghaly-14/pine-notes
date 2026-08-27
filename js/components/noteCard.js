@@ -1,4 +1,4 @@
-/**
+ /**
  * Note card component — owns creating the DOM for one note.
  *
  * Security model:
@@ -27,18 +27,27 @@ const ICONS = {
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
+
+  if (className) {
+    node.className = className;
+  }
+
+  if (text !== undefined) {
+    node.textContent = text;
+  }
+
   return node;
 }
 
 function iconButton(action, iconKey, label) {
   const btn = el("button", `action-${action}`);
+
   btn.type = "button";
   btn.dataset.action = action;
   btn.setAttribute("aria-label", label);
   btn.title = label;
-  btn.innerHTML = ICONS[iconKey]; // static, safe
+  btn.innerHTML = ICONS[iconKey];
+
   return btn;
 }
 
@@ -49,96 +58,351 @@ function iconButton(action, iconKey, label) {
 function taskProgress(items) {
   const total = items.length;
   const done = items.filter((item) => item.done).length;
+
   return { done, total };
+}
+
+function buildTaskProgress(items) {
+  const { done, total } = taskProgress(items);
+  const header = el("div", "task-progress");
+
+  const label = total === 0
+    ? "No tasks yet"
+    : `${done} / ${total} done`;
+
+  header.appendChild(
+    el("span", "task-progress-label", label)
+  );
+
+  if (total > 0) {
+    header.appendChild(buildProgressBar(done, total));
+  }
+
+  return header;
+}
+
+function buildProgressBar(done, total) {
+  const bar = el("div", "task-progress-bar");
+  const fill = el("div", "task-progress-fill");
+
+  fill.style.width = `${Math.round((done / total) * 100)}%`;
+  bar.appendChild(fill);
+
+  return bar;
+}
+
+function buildTaskItems(items, interactive) {
+  if (items.length === 0) {
+    return null;
+  }
+
+  const list = el("ul", "task-items");
+
+  items.forEach((item, index) => {
+    list.appendChild(
+      buildTaskItem(item, index, interactive)
+    );
+  });
+
+  return list;
+}
+
+function buildTaskAddRow() {
+  const addRow = el("div", "task-add");
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = "Add a task…";
+  input.dataset.role = "new-task";
+  input.setAttribute("aria-label", "New task text");
+
+  const addBtn = el("button", null, "Add");
+  addBtn.type = "button";
+  addBtn.dataset.action = "task-add";
+
+  addRow.append(input, addBtn);
+
+  return addRow;
 }
 
 function buildTaskList(note, view) {
   const wrap = el("div", "task-list");
   const items = Array.isArray(note.items) ? note.items : [];
-  const interactive = view !== "trash"; // trash is read-only
-  const { done, total } = taskProgress(items);
+  const interactive = view !== "trash";
 
-  // Progress header: "3 / 5 done" + subtle bar.
-  const header = el("div", "task-progress");
-  header.appendChild(
-    el("span", "task-progress-label", total === 0 ? "No tasks yet" : `${done} / ${total} done`)
-  );
-  if (total > 0) {
-    const bar = el("div", "task-progress-bar");
-    const fill = el("div", "task-progress-fill");
-    fill.style.width = `${Math.round((done / total) * 100)}%`;
-    bar.appendChild(fill);
-    header.appendChild(bar);
-  }
-  wrap.appendChild(header);
+  wrap.appendChild(buildTaskProgress(items));
 
-  if (items.length > 0) {
-    const list = el("ul", "task-items");
-    items.forEach((item, index) => {
-      list.appendChild(buildTaskItem(item, index, interactive));
-    });
-    wrap.appendChild(list);
+  const taskItems = buildTaskItems(items, interactive);
+
+  if (taskItems) {
+    wrap.appendChild(taskItems);
   }
 
   if (interactive) {
-    const addRow = el("div", "task-add");
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = "Add a task…";
-    input.dataset.role = "new-task";
-    input.setAttribute("aria-label", "New task text");
-    const addBtn = el("button", null, "Add");
-    addBtn.type = "button";
-    addBtn.dataset.action = "task-add";
-    addRow.append(input, addBtn);
-    wrap.appendChild(addRow);
+    wrap.appendChild(buildTaskAddRow());
   }
 
   return wrap;
 }
 
 function buildTaskItem(item, index, interactive) {
-  const li = el("li", "task-item" + (item.done ? " done" : ""));
+  const li = el(
+    "li",
+    `task-item${item.done ? " done" : ""}`
+  );
+
+  li.appendChild(
+    interactive
+      ? buildTaskCheckbox(item, index)
+      : buildStaticTaskMark(item)
+  );
+
+  li.appendChild(buildTaskText(item));
 
   if (interactive) {
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = item.done;
-    checkbox.dataset.taskAction = "toggle";
-    checkbox.dataset.itemId = item.id;
-    checkbox.setAttribute("aria-label", `Task ${index + 1}: ${item.text}`);
-    li.appendChild(checkbox);
-  } else {
-    const staticMark = el("span", "task-static-mark", item.done ? "✓" : "○");
-    staticMark.setAttribute("aria-hidden", "true");
-    li.appendChild(staticMark);
+    li.appendChild(buildTaskActions(item));
   }
 
-  const text = el("span", "task-text");
-  text.appendChild(document.createTextNode(item.text));
-  li.appendChild(text);
-
-  if (interactive) {
-    const renameBtn = el("button", "task-rename-btn");
-    renameBtn.type = "button";
-    renameBtn.dataset.action = "task-edit";
-    renameBtn.dataset.itemId = item.id;
-    renameBtn.textContent = "Rename";
-    renameBtn.setAttribute("aria-label", `Rename task: ${item.text}`);
-
-    const removeBtn = el("button", "task-remove-btn");
-    removeBtn.type = "button";
-    removeBtn.dataset.action = "task-del";
-    removeBtn.dataset.itemId = item.id;
-    removeBtn.textContent = "×";
-    removeBtn.setAttribute("aria-label", `Delete task: ${item.text}`);
-
-    li.append(renameBtn, removeBtn);
-  }
   return li;
 }
 
-/* __CARDS__ */
+function buildTaskCheckbox(item, index) {
+  const checkbox = document.createElement("input");
+
+  checkbox.type = "checkbox";
+  checkbox.checked = item.done;
+  checkbox.dataset.taskAction = "toggle";
+  checkbox.dataset.itemId = item.id;
+  checkbox.setAttribute(
+    "aria-label",
+    `Task ${index + 1}: ${item.text}`
+  );
+
+  return checkbox;
+}
+
+function buildStaticTaskMark(item) {
+  const mark = el(
+    "span",
+    "task-static-mark",
+    item.done ? "✓" : "○"
+  );
+
+  mark.setAttribute("aria-hidden", "true");
+
+  return mark;
+}
+
+function buildTaskText(item) {
+  const text = el("span", "task-text");
+  text.appendChild(document.createTextNode(item.text));
+
+  return text;
+}
+
+function buildTaskActions(item) {
+  const renameBtn = el("button", "task-rename-btn");
+  renameBtn.type = "button";
+  renameBtn.dataset.action = "task-edit";
+  renameBtn.dataset.itemId = item.id;
+  renameBtn.textContent = "Rename";
+  renameBtn.setAttribute(
+    "aria-label",
+    `Rename task: ${item.text}`
+  );
+
+  const removeBtn = el("button", "task-remove-btn");
+  removeBtn.type = "button";
+  removeBtn.dataset.action = "task-del";
+  removeBtn.dataset.itemId = item.id;
+  removeBtn.textContent = "×";
+  removeBtn.setAttribute(
+    "aria-label",
+    `Delete task: ${item.text}`
+  );
+
+  const actions = el("div", "task-actions");
+  actions.append(renameBtn, removeBtn);
+
+  return actions;
+}
+
+/* ------------------------------------------------------------------ */
+/* Note content                                                        */
+/* ------------------------------------------------------------------ */
+
+function buildNoteTitle(note, searchQuery) {
+  const title = el("h3");
+
+  title.appendChild(
+    highlightText(note.title, searchQuery)
+  );
+
+  return title;
+}
+
+function buildNoteContent(note, view, searchQuery, options) {
+  if (note.type === "task") {
+    return buildTaskList(note, view);
+  }
+
+  if (shouldRenderMarkdown(note, options)) {
+    return buildMarkdownContent(note);
+  }
+
+  return buildPlainTextContent(note, searchQuery);
+}
+
+function shouldRenderMarkdown(note, options) {
+  return (
+    options.markdown &&
+    String(note.content ?? "").trim()
+  );
+}
+
+function buildMarkdownContent(note) {
+  const rendered = renderMarkdown(note.content);
+
+  rendered.classList.add("note-md");
+
+  return rendered;
+}
+
+function buildPlainTextContent(note, searchQuery) {
+  const content = el("p");
+
+  content.appendChild(
+    highlightText(note.content, searchQuery)
+  );
+
+  return content;
+}
+
+/* ------------------------------------------------------------------ */
+/* Note metadata                                                       */
+/* ------------------------------------------------------------------ */
+
+function buildCategoryChip(categoryName) {
+  const isUncategorized = !categoryName;
+  const label = categoryName || "Uncategorized";
+  const className = `note-category${isUncategorized ? " uncategorized" : ""}`;
+
+  return el("span", className, label);
+}
+
+function buildNoteMetadata(note, categoryName) {
+  const metadata = document.createDocumentFragment();
+
+  metadata.appendChild(
+    buildCategoryChip(categoryName)
+  );
+
+  if (note.type === "task") {
+    metadata.appendChild(
+      el("span", "note-type-badge", "Tasks")
+    );
+  }
+
+  const dateLabel = formatNoteDate(note);
+
+  if (dateLabel) {
+    metadata.appendChild(
+      el("span", "note-date", dateLabel)
+    );
+  }
+
+  return metadata;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pin badge                                                           */
+/* ------------------------------------------------------------------ */
+
+function buildPinnedBadge() {
+  const badge = el("span", "pinned-badge");
+
+  badge.innerHTML = ICONS.pin.replace(
+    'width="18" height="18"',
+    'width="14" height="14"'
+  );
+
+  badge.setAttribute("role", "img");
+  badge.setAttribute("aria-label", "Pinned");
+
+  return badge;
+}
+
+function shouldShowPinnedBadge(note, view) {
+  return note.pinned && view === "active";
+}
+
+/* ------------------------------------------------------------------ */
+/* Card actions                                                        */
+/* ------------------------------------------------------------------ */
+
+const VIEW_ACTIONS = {
+  active: [
+    ["pin", "pin", "Pin note"],
+    ["edit", "edit", "Edit note"],
+    ["archive", "archive", "Archive note"],
+    ["trash", "trash", "Move to trash"],
+  ],
+  archive: [
+    ["unarchive", "unarchive", "Unarchive note"],
+    ["trash", "trash", "Move to trash"],
+  ],
+  trash: [
+    ["restore", "restore", "Restore note"],
+    ["purge", "trash", "Delete forever"],
+  ],
+};
+
+function getActionLabel(action, note) {
+  if (action === "pin") {
+    return note.pinned ? "Unpin note" : "Pin note";
+  }
+
+  return VIEW_ACTIONS[viewActionFallback(action)]?.find(
+    ([actionName]) => actionName === action
+  )?.[2] || "";
+}
+
+function viewActionFallback(action) {
+  if (action === "pin" || action === "edit" || action === "archive") {
+    return "active";
+  }
+
+  if (action === "unarchive") {
+    return "archive";
+  }
+
+  return "trash";
+}
+
+function buildActionButton(action, iconKey, defaultLabel, note) {
+  const label = action === "pin"
+    ? getActionLabel(action, note)
+    : defaultLabel;
+
+  return iconButton(action, iconKey, label);
+}
+
+function buildCardActions(note, view) {
+  const actions = el("div", "note-actions");
+  const viewActions = VIEW_ACTIONS[view] || [];
+
+  viewActions.forEach(([action, iconKey, label]) => {
+    actions.appendChild(
+      buildActionButton(action, iconKey, label, note)
+    );
+  });
+
+  return actions;
+}
+
+/* ------------------------------------------------------------------ */
+/* Note card                                                           */
+/* ------------------------------------------------------------------ */
 
 /**
  * @param {object} note   Sanitized note from state.
@@ -151,89 +415,95 @@ function buildTaskItem(item, index, interactive) {
  *        safety take priority over fancy highlighting).
  * @returns {HTMLElement} Card element (data-id set for delegation).
  */
-export function createNoteCard(note, view, categoryName = "", searchQuery = "", options = {}) {
-  const card = el("div", "note-card" + (note.pinned && view === "active" ? " pinned" : ""));
+export function createNoteCard(
+  note,
+  view,
+  categoryName = "",
+  searchQuery = "",
+  options = {}
+) {
+  const card = el(
+    "div",
+    `note-card${note.pinned && view === "active" ? " pinned" : ""}`
+  );
+
   card.dataset.id = note.id;
-  if (note.color) card.dataset.color = note.color;
 
-  if (note.pinned && view === "active") {
-    const badge = el("span", "pinned-badge");
-    badge.innerHTML = ICONS.pin.replace('width="18" height="18"', 'width="14" height="14"'); // static, safe
-    badge.setAttribute("role", "img");
-    badge.setAttribute("aria-label", "Pinned");
-    card.appendChild(badge);
+  if (note.color) {
+    card.dataset.color = note.color;
   }
 
-  const title = el("h3", null);
-  title.appendChild(highlightText(note.title, searchQuery));
-  card.appendChild(title);
-
-  if (note.type === "task") {
-    card.appendChild(buildTaskList(note, view));
-  } else if (options.markdown && String(note.content ?? "").trim()) {
-    const rendered = renderMarkdown(note.content); // safe DOM (utils/markdown)
-    rendered.classList.add("note-md");
-    card.appendChild(rendered);
-  } else {
-    const content = el("p", null);
-    content.appendChild(highlightText(note.content, searchQuery));
-    card.appendChild(content);
+  if (shouldShowPinnedBadge(note, view)) {
+    card.appendChild(buildPinnedBadge());
   }
 
-  const chipLabel = categoryName || "Uncategorized";
-  const chip = el("span", "note-category" + (categoryName ? "" : " uncategorized"), chipLabel);
-  card.appendChild(chip);
+  card.appendChild(
+    buildNoteTitle(note, searchQuery)
+  );
 
-  if (note.type === "task") {
-    card.appendChild(el("span", "note-type-badge", "Tasks"));
-  }
+  card.appendChild(
+    buildNoteContent(
+      note,
+      view,
+      searchQuery,
+      options
+    )
+  );
 
-  const dateLabel = formatNoteDate(note);
-  if (dateLabel) card.appendChild(el("span", "note-date", dateLabel));
+  card.appendChild(
+    buildNoteMetadata(note, categoryName)
+  );
 
-  const actions = el("div", "note-actions");
-  if (view === "active") {
-    actions.append(
-      iconButton("pin", "pin", note.pinned ? "Unpin note" : "Pin note"),
-      iconButton("edit", "edit", "Edit note"),
-      iconButton("archive", "archive", "Archive note"),
-      iconButton("trash", "trash", "Move to trash")
-    );
-  } else if (view === "archive") {
-    actions.append(
-      iconButton("unarchive", "unarchive", "Unarchive note"),
-      iconButton("trash", "trash", "Move to trash")
-    );
-  } else {
-    // trash
-    actions.append(
-      iconButton("restore", "restore", "Restore note"),
-      iconButton("purge", "trash", "Delete forever")
-    );
-  }
-  card.appendChild(actions);
+  card.appendChild(
+    buildCardActions(note, view)
+  );
+
   return card;
 }
+
+/* ------------------------------------------------------------------ */
+/* Empty state                                                         */
+/* ------------------------------------------------------------------ */
 
 /** Static empty-state markup, per view and search context. */
 export function createEmptyState(view, isSearch) {
   const wrap = el("div", "empty-notes");
+  const [heading, body] = getEmptyStateMessage(view, isSearch);
+
+  const h3 = el("h3", null, heading);
+  const p = el("p", null, body);
+
+  wrap.append(h3, p);
+
+  return wrap;
+}
+
+function getEmptyStateMessage(view, isSearch) {
   const messages = {
     active: isSearch
       ? ["No Matching Notes", `No notes found for "${isSearch}".`]
       : ["No Notes Found", "Try adding a new note."],
+
     archive: isSearch
-      ? ["No Matching Archived Notes", `Nothing archived matches "${isSearch}".`]
-      : ["No Archived Notes", "Notes you archive will appear here."],
+      ? [
+          "No Matching Archived Notes",
+          `Nothing archived matches "${isSearch}".`,
+        ]
+      : [
+          "No Archived Notes",
+          "Notes you archive will appear here.",
+        ],
+
     trash: isSearch
-      ? ["No Matching Notes in Trash", `Nothing in trash matches "${isSearch}".`]
-      : ["Trash is Empty", "Deleted notes rest here for 30 days before being purged."],
+      ? [
+          "No Matching Notes in Trash",
+          `Nothing in trash matches "${isSearch}".`,
+        ]
+      : [
+          "Trash is Empty",
+          "Deleted notes rest here for 30 days before being purged.",
+        ],
   };
-  const [heading, body] = messages[view] ?? messages.active;
-  // Built with createElement/textContent only — same XSS-safe model as
-  // the rest of the component layer.
-  const h3 = el("h3", null, heading);
-  const p = el("p", null, body);
-  wrap.append(h3, p);
-  return wrap;
+
+  return messages[view] ?? messages.active;
 }
