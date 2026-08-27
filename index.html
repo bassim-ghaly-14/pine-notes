@@ -134,7 +134,6 @@
           type="text"
           id="searchInput"
           placeholder="Search notes…"
-          aria-label="Search notes"
           autocomplete="off"
         />
 
@@ -197,7 +196,7 @@
           aria-hidden="true"
         >
           <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-.33-1.82V9a1.65 1.65 0 0 0 1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
       </button>
 
@@ -257,7 +256,6 @@
         type="text"
         id="noteTitle"
         placeholder="Note title..."
-        aria-label="Note title"
       />
 
 
@@ -271,7 +269,6 @@
       <textarea
         id="noteContent"
         placeholder="Write your thoughts..."
-        aria-label="Note content"
       ></textarea>
 
 
@@ -324,7 +321,7 @@
           type="button"
           class="md-btn"
           data-md="heading"
-          aria-label="Heading"
+          aria-label="H — Heading"
           title="Heading"
         >
           H
@@ -334,7 +331,7 @@
           type="button"
           class="md-btn"
           data-md="bold"
-          aria-label="Bold (Ctrl/Cmd+B)"
+          aria-label="B — Bold (Ctrl/Cmd+B)"
           title="Bold"
         >
           <strong>B</strong>
@@ -344,7 +341,7 @@
           type="button"
           class="md-btn"
           data-md="italic"
-          aria-label="Italic (Ctrl/Cmd+I)"
+          aria-label="I — Italic (Ctrl/Cmd+I)"
           title="Italic"
         >
           <em>I</em>
@@ -354,7 +351,7 @@
           type="button"
           class="md-btn"
           data-md="strike"
-          aria-label="Strikethrough"
+          aria-label="S — Strikethrough"
           title="Strikethrough"
         >
           <s>S</s>
@@ -364,7 +361,7 @@
           type="button"
           class="md-btn"
           data-md="code"
-          aria-label="Inline code"
+          aria-label="&lt;/&gt; — Inline code"
           title="Inline code"
         >
           &lt;/&gt;
@@ -374,7 +371,7 @@
           type="button"
           class="md-btn"
           data-md="link"
-          aria-label="Link (Ctrl/Cmd+K)"
+          aria-label="Link — Link (Ctrl/Cmd+K)"
           title="Link"
         >
           <svg
@@ -418,7 +415,7 @@
           type="button"
           class="md-btn"
           data-md="ol"
-          aria-label="Numbered list"
+          aria-label="1. — Numbered list"
           title="Numbered list"
         >
           1.
@@ -428,7 +425,7 @@
           type="button"
           class="md-btn"
           data-md="quote"
-          aria-label="Quote"
+          aria-label="&ldquo;&rdquo; — Quote"
           title="Quote"
         >
           &ldquo;&rdquo;
@@ -438,7 +435,7 @@
           type="button"
           class="md-btn"
           data-md="codeblock"
-          aria-label="Code block"
+          aria-label="{ } — Code block"
           title="Code block"
         >
           { }
@@ -528,10 +525,7 @@
           Category
         </label>
 
-        <select
-          id="noteCategory"
-          aria-label="Category"
-        >
+        <select id="noteCategory">
         </select>
 
 
@@ -598,10 +592,8 @@
           Sort
         </label>
 
-        <select
-          id="sortSelect"
-          aria-label="Sort notes"
-        >
+        <select id="sortSelect">
+
           <option value="updated">
             Recently updated
           </option>
@@ -617,6 +609,7 @@
           <option value="pinned">
             Pinned first
           </option>
+
         </select>
 
 
@@ -802,12 +795,12 @@
     id="manageCategoriesModal"
     role="dialog"
     aria-modal="true"
-    aria-label="Manage categories"
+    aria-labelledby="manageCategoriesTitle"
   >
 
     <div class="modal wide">
 
-      <h2>
+      <h2 id="manageCategoriesTitle">
         Manage Categories
       </h2>
 
@@ -830,7 +823,6 @@
           type="text"
           id="newCategoryName"
           placeholder="New category name…"
-          aria-label="New category name"
         />
 
         <button
@@ -886,7 +878,6 @@
         type="text"
         id="paletteInput"
         placeholder="Type a command…"
-        aria-label="Search commands"
         aria-controls="paletteList"
         aria-autocomplete="list"
         autocomplete="off"
@@ -902,7 +893,7 @@
         id="paletteCloseBtn"
         type="button"
         class="palette-close"
-        aria-label="Close command palette"
+        aria-label="Esc — Close command palette"
       >
         Esc
       </button>
@@ -1133,4 +1124,5 @@
 
 </body>
 </html>
+
 <!-- chef-belly -->
