@@ -26,11 +26,17 @@ let notesGrid = null;
 
 /** Filter to the current view's lifecycle bucket. */
 function notesForView(notes, view) {
-  return notes.filter((note) =>
-    view === "trash" ? Boolean(note.deletedAt)
-    : view === "archive" ? note.archived && !note.deletedAt
-    : !note.archived && !note.deletedAt
-  );
+  return notes.filter((note) => {
+    if (view === "trash") {
+      return Boolean(note.deletedAt);
+    }
+
+    if (view === "archive") {
+      return note.archived && !note.deletedAt;
+    }
+
+    return !note.archived && !note.deletedAt;
+  });
 }
 
 const comparators = {

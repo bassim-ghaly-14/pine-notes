@@ -1,21 +1,21 @@
 /**
- * Accessible modal foundation — one reusable focus trap for ALL dialogs.
+ * Accessible modal foundation — ONE reusable controller for ALL dialogs,
+ * built on the native <dialog> element.
  *
  * Usage:
- *   const modal = createModalController(overlayEl);
- *   modal.open({ initialFocus: el, labelledBy: "id" });
+ *   const modal = createModalController(dialogEl);
+ *   modal.open({ initialFocus: el });
  *   modal.close();
  *
- * Guarantees:
+ * Guarantees (provided natively by showModal() and kept intact here):
  *   - focus moves into the dialog on open (initialFocus or first focusable)
  *   - Tab / Shift+Tab cycle INSIDE the dialog (no escape via keyboard)
- *   - background content gets `inert` + aria-hidden so pointer/AT focus
- *     cannot land outside while the dialog is open
- *   - Escape closes (unless a handler opts out)
+ *   - background content becomes inert while the dialog is open, so
+ *     pointer/AT focus cannot land outside
+ *   - Escape closes (via the `cancel` event, unless a handler opts out)
  *   - focus returns to the triggering element on close
+ *   - stacked dialogs keep only the topmost one interactive (top layer)
  */
-
-let openModals = []; // stack — only the topmost modal traps focus
 
 function focusableElements(root) {
   return [...root.querySelectorAll(
@@ -24,89 +24,52 @@ function focusableElements(root) {
   )].filter((el) => el.offsetParent !== null || el === document.activeElement);
 }
 
-export function createModalController(overlay) {
+export function createModalController(dialog) {
   let lastFocused = null;
   let active = false;
+  let showFrame = 0;
 
-  function keydown(event) {
-    if (!active) return;
-    if (event.key === "Escape") {
-      event.preventDefault();
-      close();
-      return;
-    }
-    if (event.key !== "Tab") return;
-
-    // Only trap for the topmost modal on the stack.
-    if (openModals[openModals.length - 1] !== overlay) return;
-
-    const focusables = focusableElements(overlay);
-    if (focusables.length === 0) {
-      event.preventDefault();
-      return;
-    }
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-
-    if (event.shiftKey && (document.activeElement === first || !overlay.contains(document.activeElement))) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
+  function onCancel(event) {
+    // Escape must flow through the single close() path so cleanup and
+    // focus restoration stay consistent with programmatic closes.
+    event.preventDefault();
+    close();
   }
 
   function open({ initialFocus = null } = {}) {
     if (active) return;
     active = true;
     lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    overlay.classList.add("show");
-    openModals.push(overlay);
 
-    // Background content must not receive keyboard/AT focus.
-    document.querySelectorAll("body > *:not(script)").forEach((child) => {
-      if (child !== overlay) {
-        child.setAttribute("inert", "");
-        child.setAttribute("aria-hidden", "true");
-      }
+    // showModal() provides the focus trap, the modal top layer, background
+    // inertness and Escape handling natively.
+    dialog.addEventListener("cancel", onCancel);
+    dialog.showModal();
+
+    // The dialog just switched from display:none to display:flex; add the
+    // animation class on the next frame so the opacity transition runs.
+    showFrame = requestAnimationFrame(() => {
+      showFrame = 0;
+      dialog.classList.add("show");
     });
 
     const target =
       initialFocus ??
-      focusableElements(overlay)[0] ??
-      overlay.querySelector("[data-autofocus]");
+      focusableElements(dialog)[0] ??
+      dialog.querySelector("[data-autofocus]");
     target?.focus?.();
-
-    overlay.addEventListener("keydown", keydown);
   }
 
   function close() {
     if (!active) return;
     active = false;
-    overlay.classList.remove("show");
-    openModals = openModals.filter((m) => m !== overlay);
-    overlay.removeEventListener("keydown", keydown);
-
-    // Restore background only when no other modal remains open.
-    if (openModals.length === 0) {
-      document.querySelectorAll("body > [inert]").forEach((child) => {
-        child.removeAttribute("inert");
-        child.removeAttribute("aria-hidden");
-      });
-    } else {
-      // Nested-modal case: re-apply inert so ONLY the topmost dialog is
-      // interactive. Without this, the parent dialog would keep the inert
-      // it received when the nested one opened, and restored focus would
-      // silently fail.
-      const topmost = openModals[openModals.length - 1];
-      document.querySelectorAll("body > *:not(script)").forEach((child) => {
-        if (child !== topmost) {
-          child.setAttribute("inert", "");
-          child.setAttribute("aria-hidden", "true");
-        }
-      });
+    if (showFrame) {
+      cancelAnimationFrame(showFrame);
+      showFrame = 0;
     }
+    dialog.classList.remove("show");
+    dialog.removeEventListener("cancel", onCancel);
+    dialog.close();
 
     lastFocused?.focus?.(); // return focus to the trigger
     lastFocused = null;

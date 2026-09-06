@@ -91,11 +91,6 @@ function handleUndoShortcut(event, key) {
   return true;
 }
 
-function focusSearch() {
-  event.preventDefault();
-  byId("searchInput")?.focus();
-}
-
 function startNewNote() {
   setEditing(null);
   window.scrollTo({

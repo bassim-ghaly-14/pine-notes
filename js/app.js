@@ -81,21 +81,21 @@ function buildColorPicker() {
     ["rose", "Rose"],
     ["purple", "Purple"],
   ].forEach(([value, label], index) => {
-    const swatch = document.createElement("button");
-    swatch.type = "button";
+    const swatch = document.createElement("input");
+    swatch.type = "radio";
+    swatch.name = "noteColor";
+    swatch.value = value;
     swatch.className = "color-swatch" + (value === "" ? " default" : "");
     if (value) swatch.dataset.color = value;
-    swatch.setAttribute("role", "radio");
     swatch.setAttribute("aria-label", label);
-    swatch.setAttribute("aria-checked", String(index === 0));
+    swatch.checked = index === 0;
     if (index === 0) swatch.classList.add("selected");
 
-    swatch.addEventListener("click", () => {
+    swatch.addEventListener("change", () => {
+      if (!swatch.checked) return;
       selectedColor = value || null;
       picker.querySelectorAll(".color-swatch").forEach((s) => {
-        const isThis = s === swatch;
-        s.classList.toggle("selected", isThis);
-        s.setAttribute("aria-checked", String(isThis));
+        s.classList.toggle("selected", s.checked);
       });
       // While editing, color changes apply immediately.
       const editingId = getState().editingId;
@@ -103,6 +103,15 @@ function buildColorPicker() {
     });
 
     picker.appendChild(swatch);
+  });
+}
+
+/** Reflect selectedColor onto the native color radio group. */
+function syncColorPicker() {
+  byId("colorPicker")?.querySelectorAll(".color-swatch").forEach((swatch) => {
+    const isThis = (swatch.value || null) === selectedColor;
+    swatch.checked = isThis;
+    swatch.classList.toggle("selected", isThis);
   });
 }
 
@@ -123,11 +132,8 @@ function syncFormMode() {
     cancelEditBtn.hidden = true;
     noteForm?.classList.remove("editing");
     selectedColor = null;
-    byId("colorPicker")?.querySelectorAll(".color-swatch").forEach((s, i) => {
-      s.classList.toggle("selected", i === 0);
-      s.setAttribute("aria-checked", String(i === 0));
-    });
   }
+  syncColorPicker();
 }
 
 function submitNote() {
@@ -185,13 +191,14 @@ subscribe(() => syncFormMode());
 let selectedType = "text";
 
 function initTypeToggle() {
-  document.querySelectorAll(".type-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      selectedType = btn.dataset.noteType === "task" ? "task" : "text";
-      document.querySelectorAll(".type-btn").forEach((b) => {
-        const isThis = b === btn;
-        b.classList.toggle("selected", isThis);
-        b.setAttribute("aria-checked", String(isThis));
+  const labels = document.querySelectorAll(".type-toggle .type-btn");
+
+  document.querySelectorAll('input[name="noteType"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      if (!radio.checked) return;
+      selectedType = radio.value === "task" ? "task" : "text";
+      labels.forEach((label) => {
+        label.classList.toggle("selected", label.htmlFor === radio.id);
       });
     });
   });

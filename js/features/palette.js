@@ -184,8 +184,6 @@ function renderList() {
   listEl.replaceChildren();
 
   if (commands.length === 0) {
-    input.removeAttribute("aria-activedescendant");
-
     const empty = el(
       "li",
       "palette-empty",
@@ -197,20 +195,16 @@ function renderList() {
   }
 
   commands.forEach((command, index) => {
-    const item = el(
-      "li",
-      "palette-item" +
-        (index === selectedIndex ? " selected" : "")
-    );
+    const row = document.createElement("li");
 
+    // Real buttons: natively focusable, announced and operable by
+    // screen readers and keyboard — no ARIA widget emulation needed.
+    const item = document.createElement("button");
+
+    item.type = "button";
+    item.className = "palette-item" +
+      (index === selectedIndex ? " selected" : "");
     item.dataset.index = String(index);
-    item.id = `palette-option-${index}`;
-
-    item.setAttribute("role", "option");
-    item.setAttribute(
-      "aria-selected",
-      String(index === selectedIndex)
-    );
 
     item.appendChild(el("span", null, command.label));
 
@@ -220,23 +214,20 @@ function renderList() {
       );
     }
 
-    listEl.appendChild(item);
+    row.appendChild(item);
+    listEl.appendChild(row);
   });
-
-  input.setAttribute(
-    "aria-activedescendant",
-    `palette-option-${selectedIndex}`
-  );
 }
 
 /**
- * Update the visual + ARIA selection without rebuilding the list.
+ * Update the visual selection without rebuilding the list.
+ * Arrow-key navigation moves DOM focus between the command buttons,
+ * so assistive tech always announces the highlighted command.
  */
 function setSelected(index) {
   const items = listEl?.querySelectorAll(".palette-item");
 
   if (!items || items.length === 0) {
-    input?.removeAttribute("aria-activedescendant");
     return;
   }
 
@@ -246,20 +237,24 @@ function setSelected(index) {
   );
 
   items.forEach((item, itemIndex) => {
-    const selected = itemIndex === selectedIndex;
-
-    item.classList.toggle("selected", selected);
-
-    item.setAttribute(
-      "aria-selected",
-      String(selected)
+    item.classList.toggle(
+      "selected",
+      itemIndex === selectedIndex
     );
   });
+}
 
-  input?.setAttribute(
-    "aria-activedescendant",
-    `palette-option-${selectedIndex}`
-  );
+/** Move focus to the command button at `index` (wraps within the list). */
+function focusItem(index) {
+  const items = listEl?.querySelectorAll(".palette-item");
+
+  if (!items || items.length === 0) {
+    return;
+  }
+
+  const next = ((index % items.length) + items.length) % items.length;
+
+  items[next].focus();
 }
 
 /* ------------------------------------------------------------------ */
@@ -383,11 +378,7 @@ export function initPalette(openSettings) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
 
-      setSelected(
-        count > 0
-          ? (selectedIndex + 1) % count
-          : 0
-      );
+      if (count > 0) focusItem(selectedIndex);
 
       return;
     }
@@ -395,11 +386,7 @@ export function initPalette(openSettings) {
     if (event.key === "ArrowUp") {
       event.preventDefault();
 
-      setSelected(
-        count > 0
-          ? (selectedIndex - 1 + count) % count
-          : 0
-      );
+      if (count > 0) focusItem(count - 1);
 
       return;
     }
@@ -407,6 +394,43 @@ export function initPalette(openSettings) {
     if (event.key === "Enter") {
       event.preventDefault();
       execute(selectedIndex);
+    }
+  });
+
+  // While a command button has focus, Arrow keys move between commands;
+  // ArrowUp from the first command returns to the input.
+  listEl?.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+
+    const item =
+      event.target instanceof Element
+        ? event.target.closest(".palette-item")
+        : null;
+
+    if (item?.dataset.index === undefined) return;
+
+    event.preventDefault();
+
+    const index = Number(item.dataset.index);
+    const count = listEl.querySelectorAll(".palette-item").length;
+
+    if (event.key === "ArrowDown") {
+      focusItem(index + 1);
+    } else if (index === 0) {
+      input?.focus();
+    } else {
+      focusItem(index - 1);
+    }
+  });
+
+  // Selection follows focus (also covers mouse hover focus).
+  listEl?.addEventListener("focusin", (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const item = event.target.closest(".palette-item");
+
+    if (item?.dataset.index !== undefined) {
+      setSelected(Number(item.dataset.index));
     }
   });
 

@@ -40,13 +40,13 @@ export function safeUrl(url) {
   }
 
   // Control characters / whitespace inside the scheme can trick parsers.
-  if (/[\s\u0000-\u001f]/.test(value)) {
+  // \u0000-\u0008 and \u000e-\u001f plus \s covers every control character
+  // and whitespace without duplicating the entries \s already matches.
+  if (/[\u0000-\u0008\u000e-\u001f\s]/.test(value)) {
     return null;
   }
 
-  const schemeMatch = value.match(
-    /^([a-zA-Z][a-zA-Z0-9+.-]*):/
-  );
+  const schemeMatch = /^([a-zA-Z][a-zA-Z0-9+.-]*):/.exec(value);
 
   if (!schemeMatch) {
     // No scheme → relative URL → cannot execute a handler.
@@ -130,7 +130,7 @@ export function parseInline(text) {
 
 function findInlineMatch(source, position) {
   for (const rule of INLINE_RULES) {
-    const match = source.slice(position).match(rule.re);
+    const match = rule.re.exec(source.slice(position));
 
     if (match) {
       return {
@@ -187,7 +187,7 @@ function createLinkNode(match) {
 /* Block parsing                                                       */
 /* ------------------------------------------------------------------ */
 
-const CHECKBOX_RE = /^\[([ xX])\]\s+(.*)$/;
+const CHECKBOX_RE = /^\[([ xX])\]\s+(\S.*)?$/;
 const SPECIAL_LINE_RE =
   /^(#{1,3}\s|>|```|\s*[-*]\s|\s*\d+[.)]\s)/;
 
@@ -220,7 +220,9 @@ export function parseMarkdown(source) {
       blocks.push(result.block);
     }
 
-    index = result.nextIndex;
+    // Always make progress, even when a malformed block consumes no input
+    // (e.g. a list marker with no item text) — prevents an infinite loop.
+    index = result.nextIndex > index ? result.nextIndex : index + 1;
   }
 
   return blocks;
@@ -264,7 +266,7 @@ function parseBlock(lines, index) {
 }
 
 function parseFencedCode(lines, index) {
-  const fence = lines[index].match(/^```(\w*)\s*$/);
+  const fence = /^```(\w*)\s*$/.exec(lines[index]);
 
   if (!fence) {
     return null;
@@ -295,9 +297,9 @@ function parseFencedCode(lines, index) {
 }
 
 function parseHeading(line, index) {
-  const heading = line.match(
-    /^(#{1,3})\s+(.*)$/
-  );
+  // (\S.*)? keeps the engine linear: after the greedy \s+ consumes every
+  // whitespace character, either a non-whitespace run follows or nothing.
+  const heading = /^(#{1,3})\s+(\S.*)?$/.exec(line);
 
   if (!heading) {
     return null;
@@ -377,13 +379,9 @@ function parseList(lines, index) {
 }
 
 function getListInfo(line) {
-  const bullet = line.match(
-    /^\s*[-*]\s+(.*)$/
-  );
+  const bullet = /^\s*[-*]\s+(\S.*)?$/.exec(line);
 
-  const ordered = line.match(
-    /^\s*(\d+)[.)]\s+(.*)$/
-  );
+  const ordered = /^\s*(\d+)[.)]\s+(\S.*)?$/.exec(line);
 
   if (!bullet && !ordered) {
     return null;
@@ -395,13 +393,9 @@ function getListInfo(line) {
 }
 
 function parseListItem(line, isOrdered) {
-  const bullet = line.match(
-    /^\s*[-*]\s+(.*)$/
-  );
+  const bullet = /^\s*[-*]\s+(\S.*)?$/.exec(line);
 
-  const ordered = line.match(
-    /^\s*\d+[.)]\s+(.*)$/
-  );
+  const ordered = /^\s*\d+[.)]\s+(\S.*)?$/.exec(line);
 
   const rawItem = isOrdered
     ? ordered?.[1]
@@ -417,7 +411,7 @@ function parseListItem(line, isOrdered) {
     return null;
   }
 
-  const check = rawItem.match(CHECKBOX_RE);
+  const check = CHECKBOX_RE.exec(rawItem);
   const text = check ? check[2] : rawItem;
 
   return {

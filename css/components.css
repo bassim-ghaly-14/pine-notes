@@ -259,6 +259,10 @@
 .type-btn {
   position: relative;
 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
   min-width: 78px;
   height: 34px;
 
@@ -271,6 +275,8 @@
   color: var(--text-muted);
 
   cursor: pointer;
+
+  user-select: none;
 
   font-size: 0.8rem;
   font-weight: 650;
@@ -299,8 +305,8 @@
     0 0 0 4px var(--primary);
 }
 
-.type-btn.selected,
-.type-btn[aria-checked="true"] {
+.type-input:checked + .type-btn,
+.type-btn.selected {
   background: var(--surface);
 
   color: var(--primary);
@@ -310,14 +316,25 @@
     0 0 0 1px var(--border);
 }
 
-.type-btn.selected:hover,
-.type-btn[aria-checked="true"]:hover {
+.type-input:checked + .type-btn:hover,
+.type-btn.selected:hover {
   background: var(--surface);
   color: var(--primary);
 }
 
 .type-btn:active {
   transform: scale(0.97);
+}
+
+/* The visible button label receives focus from its hidden native radio. */
+.type-input:focus-visible + .type-btn {
+  z-index: 2;
+
+  outline: none;
+
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--primary);
 }
 
 
@@ -386,6 +403,13 @@
 
   flex: 0 0 21px;
 
+  padding: 0;
+  margin: 0;
+
+  /* Native radio rendered as a custom color swatch. */
+  appearance: none;
+  -webkit-appearance: none;
+
   border: 2px solid transparent;
   border-radius: 50%;
 
@@ -398,6 +422,10 @@
 
 .color-swatch:hover {
   transform: scale(1.12);
+}
+
+.color-swatch:focus-visible {
+  border-color: var(--primary);
 }
 
 .color-swatch.selected {
@@ -1003,6 +1031,17 @@ mark {
 
   z-index: 1000;
 
+  /* Native <dialog> UA styles set width/height:fit-content and
+     color:CanvasText. Revert to a full-viewport, theme-colored overlay so
+     the old centered-flex layout keeps working (see .modal below). */
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  max-width: none;
+  max-height: none;
+  color: var(--text);
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1020,6 +1059,11 @@ mark {
   transition:
     opacity var(--ease),
     visibility var(--ease);
+}
+
+/* Native <dialog>: closed dialogs are removed from the layout. */
+.modal-overlay:not([open]) {
+  display: none;
 }
 
 .modal-overlay.show {
@@ -1234,9 +1278,16 @@ mark {
   justify-content: space-between;
   gap: 12px;
 
+  width: 100%;
   padding: 10px;
 
+  border: 0;
   border-radius: 9px;
+
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
 
   cursor: pointer;
 

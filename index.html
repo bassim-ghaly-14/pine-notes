@@ -503,29 +503,40 @@
 
         <div
           class="type-toggle"
-          role="radiogroup"
+          role="group"
           aria-label="Note type"
         >
 
-          <button
-            type="button"
+          <input
+            type="radio"
+            id="noteTypeText"
+            name="noteType"
+            value="text"
+            class="type-input sr-only"
+            checked
+          >
+
+          <label
             class="type-btn selected"
-            data-note-type="text"
-            role="radio"
-            aria-checked="true"
+            for="noteTypeText"
           >
             Note
-          </button>
+          </label>
 
-          <button
-            type="button"
+          <input
+            type="radio"
+            id="noteTypeTask"
+            name="noteType"
+            value="task"
+            class="type-input sr-only"
+          >
+
+          <label
             class="type-btn"
-            data-note-type="task"
-            role="radio"
-            aria-checked="false"
+            for="noteTypeTask"
           >
             Task
-          </button>
+          </label>
 
         </div>
 
@@ -689,22 +700,18 @@
        Toast
        ========================================================= -->
 
-  <div
+  <output
     id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+  ></output>
 
 
   <!-- =========================================================
        Import Preview / Confirmation Dialog
        ========================================================= -->
 
-  <div
+  <dialog
     class="modal-overlay"
     id="importModal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="importModalTitle"
   >
 
@@ -749,18 +756,16 @@
 
     </div>
 
-  </div>
+  </dialog>
 
 
   <!-- =========================================================
        Shared Confirmation Modal
        ========================================================= -->
 
-  <div
+  <dialog
     class="modal-overlay"
     id="confirmModal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="modalTitle"
   >
 
@@ -795,18 +800,16 @@
 
     </div>
 
-  </div>
+  </dialog>
 
 
   <!-- =========================================================
        Category Manager Modal
        ========================================================= -->
 
-  <div
+  <dialog
     class="modal-overlay"
     id="manageCategoriesModal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="manageCategoriesTitle"
   >
 
@@ -860,24 +863,20 @@
 
     </div>
 
-  </div>
+  </dialog>
 
 
   <!-- =========================================================
        Command Palette
        ========================================================= -->
 
-  <div
+  <dialog
     class="modal-overlay palette-overlay"
     id="paletteOverlay"
+    aria-label="Command palette"
   >
 
-    <div
-      class="palette"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Command palette"
-    >
+    <div class="palette">
 
       <label
         class="sr-only"
@@ -890,16 +889,10 @@
         type="text"
         id="paletteInput"
         placeholder="Type a command…"
-        aria-controls="paletteList"
-        aria-autocomplete="list"
         autocomplete="off"
       />
 
-      <ul
-        id="paletteList"
-        role="listbox"
-        aria-label="Commands"
-      ></ul>
+      <ul id="paletteList"></ul>
 
       <button
         id="paletteCloseBtn"
@@ -912,18 +905,16 @@
 
     </div>
 
-  </div>
+  </dialog>
 
 
   <!-- =========================================================
        Settings Modal
        ========================================================= -->
 
-  <div
+  <dialog
     class="modal-overlay"
     id="settingsModal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="settingsTitle"
   >
 
@@ -1131,7 +1122,7 @@
 
     </div>
 
-  </div>
+  </dialog>
 
 
 </body>

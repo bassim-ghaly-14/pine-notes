@@ -1,6 +1,6 @@
 /**
  * Confirm modal component — owns THE shared confirmation dialog
- * (role="dialog", Escape closes, focus lands on confirm).
+ * (native <dialog>, Escape closes, focus lands on confirm).
  * Features supply title/message/confirm-label/onConfirm; this component
  * owns the DOM and nothing else.
  */

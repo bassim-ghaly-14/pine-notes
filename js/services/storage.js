@@ -50,7 +50,7 @@ function sanitizeNote(raw) {
 
   const createdAtMs = Date.parse(sanitizeText(raw.createdAt));
   const updatedAtMs = Date.parse(sanitizeText(raw.updatedAt));
-  const deletedAtMs = raw.deletedAt == null ? NaN : Date.parse(raw.deletedAt);
+  const deletedAtMs = raw.deletedAt == null ? Number.NaN : Date.parse(raw.deletedAt);
 
   // Pre-V2 notes carried only a display string. Keep it as a fallback label.
   const legacyLabel = sanitizeText(raw.createdAtLabel ?? raw.createdAt);
@@ -73,6 +73,19 @@ function sanitizeNote(raw) {
     items = [];
   }
 
+  const deletedAtIso = Number.isNaN(deletedAtMs)
+    ? null
+    : new Date(deletedAtMs).toISOString();
+
+  const createdAtIso = Number.isNaN(createdAtMs)
+    ? null
+    : new Date(createdAtMs).toISOString();
+
+  // updatedAt falls back to createdAt when it is missing/invalid.
+  const updatedAtIso = Number.isNaN(updatedAtMs)
+    ? createdAtIso
+    : new Date(updatedAtMs).toISOString();
+
   return {
     id: sanitizeText(raw.id) || createId(),
     type: raw.type === "task" ? "task" : "text", // existing notes never become tasks
@@ -82,11 +95,9 @@ function sanitizeNote(raw) {
     color: NOTE_COLORS.includes(raw.color) ? raw.color : null,
     pinned: raw.pinned === true,
     archived: raw.archived === true,
-    deletedAt: Number.isNaN(deletedAtMs) ? null : new Date(deletedAtMs).toISOString(),
-    createdAt: Number.isNaN(createdAtMs) ? null : new Date(createdAtMs).toISOString(),
-    updatedAt: Number.isNaN(updatedAtMs)
-      ? (Number.isNaN(createdAtMs) ? null : new Date(createdAtMs).toISOString())
-      : new Date(updatedAtMs).toISOString(),
+    deletedAt: deletedAtIso,
+    createdAt: createdAtIso,
+    updatedAt: updatedAtIso,
     ...(legacyLabel ? { createdAtLabel: legacyLabel } : {}),
     items,
   };

@@ -9,7 +9,7 @@
 
 import { getState, subscribe } from "../state/store.js";
 import { renderMarkdown } from "../utils/markdown.js";
-import { byId, qs } from "../utils/dom.js";
+import { byId } from "../utils/dom.js";
 
 let textarea = null;
 let toolbar = null;

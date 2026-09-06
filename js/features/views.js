@@ -17,11 +17,17 @@ let sortSelect = null;
 let trashActions = null;
 
 function viewCount(view) {
-  return getState().notes.filter((note) =>
-    view === "trash" ? Boolean(note.deletedAt)
-    : view === "archive" ? note.archived && !note.deletedAt
-    : !note.archived && !note.deletedAt
-  ).length;
+  return getState().notes.filter((note) => {
+    if (view === "trash") {
+      return Boolean(note.deletedAt);
+    }
+
+    if (view === "archive") {
+      return note.archived && !note.deletedAt;
+    }
+
+    return !note.archived && !note.deletedAt;
+  }).length;
 }
 
 function renderTabs() {

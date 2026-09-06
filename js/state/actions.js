@@ -274,7 +274,7 @@ export function setSetting(key, value) {
 
 function mutateTaskItems(noteId, mutator) {
   const note = getNoteById(noteId);
-  if (!note || note.type !== "task" || !Array.isArray(note.items)) return false;
+  if (note?.type !== "task" || !Array.isArray(note.items)) return false;
   const items = mutator(note.items.map((item) => ({ ...item })));
   if (!items) return false;
   setState({

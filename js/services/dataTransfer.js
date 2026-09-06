@@ -81,7 +81,9 @@ export function parseImportPayload(parsed) {
   }
 
   const looksLikeV1 = Array.isArray(parsed);
-  const version = !looksLikeV1 && typeof parsed.version === "number" ? Math.floor(parsed.version) : NaN;
+  const version = !looksLikeV1 && typeof parsed.version === "number"
+    ? Math.floor(parsed.version)
+    : Number.NaN;
 
   if (!looksLikeV1 && Number.isNaN(version)) {
     throw new ImportError("This file has no recognizable schema version.", "schema");
