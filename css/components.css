@@ -241,6 +241,7 @@
 
   width: fit-content;
   min-height: 42px;
+  min-inline-size: 0;
 
   padding: 3px;
 

@@ -412,7 +412,6 @@ export function initPalette(openSettings) {
     event.preventDefault();
 
     const index = Number(item.dataset.index);
-    const count = listEl.querySelectorAll(".palette-item").length;
 
     if (event.key === "ArrowDown") {
       focusItem(index + 1);
