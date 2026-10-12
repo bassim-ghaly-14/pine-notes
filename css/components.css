@@ -1032,6 +1032,14 @@ mark {
 
   z-index: 1000;
 
+  /* Fixed-position top-layer dialogs are NOT clipped by body/html's
+     overflow-x: clip (their containing block is the viewport). Clip at
+     the overlay's own edge so dynamic modal content (long settings
+     labels, import notes, palette rows) can never widen past the
+     viewport. clip (not hidden) avoids creating a scroll container, so
+     the inner .modal keeps its intentional vertical scrolling. */
+  overflow: clip;
+
   /* Native <dialog> UA styles set width/height:fit-content and
      color:CanvasText. Revert to a full-viewport, theme-colored overlay so
      the old centered-flex layout keeps working (see .modal below). */
@@ -1293,6 +1301,14 @@ mark {
   cursor: pointer;
 
   font-size: 0.84rem;
+}
+
+/* Long command labels must shrink and wrap inside the fixed-width
+   palette instead of forcing the overlay wider than the viewport. */
+.palette-item > span {
+  min-width: 0;
+
+  overflow-wrap: anywhere;
 }
 
 .palette-item:hover,

@@ -13,6 +13,14 @@
 
 html {
   scroll-behavior: smooth;
+
+  /* Horizontal containment lives on the ROOT element, which is what
+     actually governs the viewport's horizontal scroll (not <body> —
+     WebKit/iOS Safari ignore overflow set on body for the root scroll
+     area). overflow-x: clip (not hidden) stops horizontal overflow
+     WITHOUT creating a scroll container, so position: sticky/fixed
+     descendants keep working. */
+  overflow-x: clip;
 }
 
 body {
